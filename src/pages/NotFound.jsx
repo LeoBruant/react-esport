@@ -1,13 +1,15 @@
-// import '../style/notFound.css'
+import { Style } from './style/NotFound.js'
 import Header from '../Components/Header'
 
-function NotFound() {
+export default function NotFound() {
     return (
-        <>
-            <Header />
-            <div title="404">404</div>
-        </>
+        <Style>
+            <Header theme="dark" />
+            <div className="body">
+                <div title="404" className="text">
+                    404
+                </div>
+            </div>
+        </Style>
     )
 }
-
-export default NotFound

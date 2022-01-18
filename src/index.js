@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound'
 
 // Style
 
-import './style/app.scss'
+import './app.scss'
 
 // Bootstrap
 

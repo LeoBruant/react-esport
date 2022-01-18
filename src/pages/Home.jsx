@@ -1,14 +1,13 @@
+import { Style } from './style/Home.js'
 import Header from '../Components/Header'
-import { Link } from 'react-router-dom'
 
-function Home() {
+export default function Home() {
     return (
-        <>
-            <Header />
-            <h1>Home</h1>
-            <Link to="/azerty">404</Link>
-        </>
+        <Style>
+            <Header theme="light" />
+            <main className="main">
+                <h1 className="title">Accueil</h1>
+            </main>
+        </Style>
     )
 }
-
-export default Home
