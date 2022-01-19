@@ -1,5 +1,5 @@
 import { Style } from './style/NotFound.js'
-import Header from '../Components/Header'
+import Header from '../components/Header'
 
 export default function NotFound() {
     return (

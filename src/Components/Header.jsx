@@ -15,6 +15,11 @@ function Header({ theme }) {
                                 404
                             </Link>
                         </Nav>
+                        <Nav>
+                            <Link to="/login" className="nav-link">
+                                Connexion
+                            </Link>
+                        </Nav>
                     </Container>
                 </Navbar>
             </header>

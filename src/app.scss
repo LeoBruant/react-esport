@@ -1,3 +1,16 @@
+// General
+
 a {
     text-decoration: none !important;
+}
+
+// Forms
+
+.input-error {
+    border-color: #f00 !important;
+}
+
+.error-message {
+    text-align: center;
+    color: #f00;
 }

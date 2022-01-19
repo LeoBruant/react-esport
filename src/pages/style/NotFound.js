@@ -15,7 +15,7 @@ export const Style = styled.main`
         margin: 0;
         background: #131313;
         color: #fff;
-        font-size: 96px;
+        font-size: 250px;
         font-family: 'Fira Mono', monospace;
         letter-spacing: -7px;
         flex-grow: 1;
