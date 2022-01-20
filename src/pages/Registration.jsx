@@ -2,7 +2,7 @@ import { useState } from 'react'
 import api from '../components/api'
 import { v4 as uuidv4 } from 'uuid'
 import { Form, Container, Button } from 'react-bootstrap'
-import { Style } from './style/Registration'
+import { Style } from '../style/Registration'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 

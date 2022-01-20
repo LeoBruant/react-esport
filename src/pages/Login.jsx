@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import api from '../components/api'
 import { Form, Container, Button } from 'react-bootstrap'
-import { Style } from './style/Login'
-import { Link } from 'react-router-dom'
+import { Style } from '../style/Login'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Login() {
+    const navigate = useNavigate()
+
     const [form, setForm] = useState({
         username: '',
         password: ''
@@ -57,15 +59,14 @@ export default function Login() {
         // Continue verification
 
         if (filled) {
-            let exists = false
-
             api.get('/users').then(({ data }) => {
                 // Check if username exists
 
                 data.every(({ username, password }) => {
                     if (username === form.username) {
                         if (password === form.password) {
-                            alert('Success')
+                            window.localStorage.setItem('username', username)
+                            navigate('/')
                             return false
                         } else {
                             setErrorMessages((oldErrorMessages) => {
