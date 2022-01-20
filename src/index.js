@@ -17,6 +17,13 @@ import './app.scss'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+// Font awesome
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCog } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCog)
+
 // Render
 
 ReactDOM.render(
