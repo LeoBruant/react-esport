@@ -1,4 +1,4 @@
-import { Style } from './style/NotFound.js'
+import { Style } from '../style/NotFound.js'
 import Header from '../components/Header'
 
 export default function NotFound() {
