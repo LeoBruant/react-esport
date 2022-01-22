@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import api from '../components/api'
+import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { Form, Container, Button } from 'react-bootstrap'
 import { Style } from '../style/Registration'
@@ -79,7 +79,8 @@ export default function Registration() {
             else {
                 let exists = false
 
-                api.get('/users')
+                axios
+                    .get('http://localhost:3004/users')
                     .then(({ data }) => {
                         // Check if username exists
 
@@ -108,7 +109,7 @@ export default function Registration() {
                                 coins: 100
                             }
 
-                            api.post('/users', request).then(() => {
+                            axios.post('http://localhost:3004/users/users', request).then(() => {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Votre compte à bien été créé',

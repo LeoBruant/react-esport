@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Registration from './pages/Registration'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
+import Leagues from './pages/Leagues'
 
 // Style
 
@@ -27,13 +28,16 @@ library.add(faCog)
 // Render
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/registration" element={<Registration />} />
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<NotFound />} />
-        </Routes>
-    </BrowserRouter>,
+    <React.StrictMode>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/registration" element={<Registration />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/ligues" element={<Leagues />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </BrowserRouter>
+    </React.StrictMode>,
     document.getElementById('root')
 )

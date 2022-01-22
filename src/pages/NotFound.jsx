@@ -1,10 +1,10 @@
 import { Style } from '../style/NotFound.js'
-import Header from '../components/Header'
+import NavBar from '../components/NavBar'
 
 export default function NotFound() {
     return (
         <Style>
-            <Header theme="dark" />
+            <NavBar theme="dark" />
             <div className="body">
                 <div title="404" className="text">
                     404

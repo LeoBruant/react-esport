@@ -12,7 +12,7 @@ export default function Redirect() {
 
     React.useEffect(() => {
         redirect()
-    })
+    }, [])
 
     return null
 }

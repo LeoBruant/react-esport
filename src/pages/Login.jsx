@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import api from '../components/api'
+import axios from 'axios'
 import { Form, Container, Button } from 'react-bootstrap'
 import { Style } from '../style/Login'
 import { Link, useNavigate } from 'react-router-dom'
@@ -59,7 +59,7 @@ export default function Login() {
         // Continue verification
 
         if (filled) {
-            api.get('/users').then(({ data }) => {
+            axios.get('http://localhost:3004/users').then(({ data }) => {
                 // Check if username exists
 
                 data.every(({ username, password }) => {
