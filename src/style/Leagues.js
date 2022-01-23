@@ -4,7 +4,7 @@ export const Style = styled.div`
     .header {
         .title {
             text-align: center;
-            padding: 5rem 0;
+            padding: 2.5rem 0 5rem 0;
             font-size: 4.5rem;
             border-bottom: 2px solid #000;
             margin-bottom: 0;
@@ -23,8 +23,7 @@ export const Style = styled.div`
                 display: flex;
                 flex-direction: column;
                 height: 250px;
-                margin-left: auto;
-                margin-right: auto;
+                margin: 0 auto;
 
                 .name {
                     text-align: center;

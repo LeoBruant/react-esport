@@ -20,9 +20,11 @@ export default function Login() {
         // Remove error message
 
         if (errorMessages[field] !== '') {
-            setErrorMessages({
-                ...errorMessages,
-                [field]: ''
+            setErrorMessages((oldErrorMessages) => {
+                return {
+                    ...oldErrorMessages,
+                    [field]: ''
+                }
             })
         }
 

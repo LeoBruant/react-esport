@@ -30,9 +30,11 @@ export default function Registration() {
         } else if (field === 'password' && wrongPasswordMessage !== '') {
             setWrongPasswordMessage('')
         } else if (errorMessages[field] !== '') {
-            setErrorMessages({
-                ...errorMessages,
-                [field]: ''
+            setErrorMessages((oldErrorMessages) => {
+                return {
+                    ...oldErrorMessages,
+                    [field]: ''
+                }
             })
         }
 

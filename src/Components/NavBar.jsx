@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import React from 'react'
 import axios from 'axios'
 import Redirect from './Redirect'
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
@@ -36,7 +35,7 @@ export default function NavBar({ theme }) {
                             Ligues
                         </Link>
                     </Nav>
-                    <Nav>
+                    <Nav style={{ flexDirection: 'row' }}>
                         {window.localStorage.getItem('username') === null && (
                             <Link to="/login" className="nav-link">
                                 Connexion
@@ -46,7 +45,7 @@ export default function NavBar({ theme }) {
                         {window.localStorage.getItem('username') !== null && (
                             <>
                                 <Navbar.Text>{coins} Jetons</Navbar.Text>
-                                <NavDropdown title={<FontAwesomeIcon icon={['fas', 'cog']} />}>
+                                <NavDropdown title={<FontAwesomeIcon icon={['fas', 'cog']} style={{ margin: '0 0.5rem' }} />}>
                                     <NavDropdown.Item>Profil</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item onClick={disconnect}>Déconnexion</NavDropdown.Item>
