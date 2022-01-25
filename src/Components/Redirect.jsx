@@ -4,14 +4,10 @@ import React from 'react'
 export default function Redirect() {
     const navigate = useNavigate()
 
-    const redirect = () => {
+    React.useEffect(() => {
         if (window.localStorage.getItem('username') === null) {
             navigate('/login')
         }
-    }
-
-    React.useEffect(() => {
-        redirect()
     }, [])
 
     return null

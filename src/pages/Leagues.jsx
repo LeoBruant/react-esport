@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import pandascore from '../components/Pandascore'
 import NavBar from '../components/NavBar'
 import { Style } from '../style/Leagues.js'
-import ClipLoader from 'react-spinners/ClipLoader'
-import { css } from '@emotion/react'
+import { Spinner } from 'react-bootstrap'
 import noImage from '../assets/images/no-image.jpg'
 
 export default function Leagues() {
@@ -12,7 +11,7 @@ export default function Leagues() {
 
     React.useEffect(() => {
         pandascore
-            .get('lol/leagues')
+            .get('lol/leagues?per_page=100')
             .then(({ data }) => {
                 setLeagues(data)
             })
@@ -28,22 +27,15 @@ export default function Leagues() {
                 <header className="header">
                     <h1 className="title">Ligues LoL</h1>
                 </header>
-                <ClipLoader
-                    color="#000000"
-                    loading={!isLoaded}
-                    css={css`
-                        display: block;
-                        margin: 2.5rem auto;
-                    `}
-                />
+                {!isLoaded && <Spinner animation="border" className="spinner" />}
                 <main className="main container">
                     <div className="leagues">
                         {leagues.map(({ id, image_url, name, url }) => (
                             <div className="league" key={id}>
                                 <p className="name">{name}</p>
                                 <div className="image-container">
-                                    <a href={url} target="_blank">
-                                        <img className="image" src={image_url !== null ? image_url : noImage}></img>
+                                    <a href={url} target="_blank" rel="noreferrer">
+                                        <img className="image" src={image_url !== null ? image_url : noImage} alt={name + ' image'}></img>
                                     </a>
                                 </div>
                             </div>

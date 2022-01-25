@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 import { Form, Container, Button } from 'react-bootstrap'
 import { Style } from '../style/Registration'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 export default function Registration() {
+    const navigate = useNavigate()
+
     const [form, setForm] = useState({
         email: '',
         username: '',
@@ -84,14 +85,17 @@ export default function Registration() {
                 axios
                     .get('http://localhost:3004/users')
                     .then(({ data }) => {
-                        // Check if username exists
+                        if (data.length !== 0) {
+                            // Check if username exists
 
-                        data.every(({ username }) => {
-                            if (username === form.username) {
-                                exists = true
+                            data.every(({ username }) => {
+                                if (username === form.username) {
+                                    exists = true
+                                    return false
+                                }
                                 return false
-                            }
-                        })
+                            })
+                        }
                     })
                     .finally(() => {
                         // Show error message
@@ -103,20 +107,22 @@ export default function Registration() {
                         // Create user
                         else {
                             let request = {
-                                id: uuidv4(),
                                 email: form.email,
                                 name: form.name,
                                 username: form.username,
                                 password: form.password,
-                                coins: 100
+                                coins: 100,
+                                bets: []
                             }
 
-                            axios.post('http://localhost:3004/users/users', request).then(() => {
+                            axios.post('http://localhost:3004/users', request).then(() => {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Votre compte à bien été créé',
                                     showConfirmButton: false,
                                     timer: 1500
+                                }).then(() => {
+                                    navigate('/login')
                                 })
                             })
                         }

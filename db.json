@@ -1,11 +1,12 @@
 {
     "users": [
         {
-            "id": "fff5f90a-7f51-4d33-876f-6f9b3bdf3960",
             "email": "bruantleo@gmail.com",
             "username": "Lespectre",
-            "password": "?dkKo3Y&myN9PkBi",
-            "coins": 100
+            "password": "Dz4pBxKsFBEmoF$g",
+            "coins": 100,
+            "bets": [],
+            "id": 1
         }
     ]
 }
