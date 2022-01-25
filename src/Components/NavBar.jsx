@@ -12,7 +12,7 @@ export default function NavBar({ theme }) {
     const navigate = useNavigate()
 
     React.useEffect(() => {
-        axios.get('http://localhost:3004/users?username=' + window.localStorage.getItem('username')).then(({ data }) => {
+        axios.get('http://localhost:3004/users?loginToken=' + window.localStorage.getItem('token')).then(({ data }) => {
             setCoins(data[0].coins)
         })
     }, [])
@@ -35,23 +35,13 @@ export default function NavBar({ theme }) {
                             Ligues
                         </Link>
                     </Nav>
-                    <Nav style={{ flexDirection: 'row' }}>
-                        {window.localStorage.getItem('username') === null && (
-                            <Link to="/login" className="nav-link">
-                                Connexion
-                            </Link>
-                        )}
-
-                        {window.localStorage.getItem('username') !== null && (
-                            <>
-                                <Navbar.Text>{coins} Jetons</Navbar.Text>
-                                <NavDropdown title={<FontAwesomeIcon icon={['fas', 'cog']} style={{ margin: '0 0.5rem' }} />}>
-                                    <NavDropdown.Item>Profil</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item onClick={disconnect}>Déconnexion</NavDropdown.Item>
-                                </NavDropdown>
-                            </>
-                        )}
+                    <Nav className="flex-row">
+                        <Navbar.Text>{coins} Jetons</Navbar.Text>
+                        <NavDropdown title={<FontAwesomeIcon icon={['fas', 'cog']} className="mx-1" />}>
+                            <NavDropdown.Item>Profil</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item onClick={disconnect}>Déconnexion</NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
                 </Container>
             </Navbar>

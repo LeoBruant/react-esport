@@ -107,12 +107,13 @@ export default function Registration() {
                         // Create user
                         else {
                             let request = {
+                                bets: [],
+                                coins: 100,
                                 email: form.email,
                                 name: form.name,
-                                username: form.username,
                                 password: form.password,
-                                coins: 100,
-                                bets: []
+                                loginToken: Math.random().toString(36).substr(2),
+                                username: form.username
                             }
 
                             axios.post('http://localhost:3004/users', request).then(() => {

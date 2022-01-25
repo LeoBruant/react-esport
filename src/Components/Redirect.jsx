@@ -5,7 +5,7 @@ export default function Redirect() {
     const navigate = useNavigate()
 
     React.useEffect(() => {
-        if (window.localStorage.getItem('username') === null) {
+        if (window.localStorage.getItem('token') === null) {
             navigate('/login')
         }
     }, [])

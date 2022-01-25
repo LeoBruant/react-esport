@@ -64,10 +64,10 @@ export default function Login() {
             axios.get('http://localhost:3004/users').then(({ data }) => {
                 // Check if username exists
 
-                data.every(({ username, password }) => {
+                data.every(({ username, password, loginToken }) => {
                     if (username === form.username) {
                         if (password === form.password) {
-                            window.localStorage.setItem('username', username)
+                            window.localStorage.setItem('token', loginToken)
                             navigate('/')
                             return false
                         } else {
