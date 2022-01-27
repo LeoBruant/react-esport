@@ -91,7 +91,7 @@ export default function Registration() {
                             data.every(({ username }) => {
                                 if (username === form.username) {
                                     exists = true
-                                    return false
+                                    return true
                                 }
                                 return false
                             })
@@ -119,8 +119,8 @@ export default function Registration() {
                             axios.post('http://localhost:3004/users', request).then(() => {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Votre compte à bien été créé',
-                                    showConfirmButton: false,
+                                    title: 'Votre compte a bien été créé',
+                                    confirmButtonColor: '#157347',
                                     timer: 1500
                                 }).then(() => {
                                     navigate('/login')
@@ -182,7 +182,7 @@ export default function Registration() {
                         <p className="error-message">{wrongPasswordMessage}</p>
                     </Form.Group>
 
-                    <Button className="submit" variant="success" type="submit">
+                    <Button type="submit" className="submit" variant="success">
                         Inscription
                     </Button>
                 </Form>

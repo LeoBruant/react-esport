@@ -6,7 +6,8 @@ a {
 
 // Forms
 
-.input-error {
+.input-error,
+.input-error input {
     border-color: #f00 !important;
 }
 

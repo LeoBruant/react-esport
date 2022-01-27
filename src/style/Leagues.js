@@ -4,8 +4,8 @@ export const Style = styled.div`
     .header {
         .title {
             text-align: center;
-            padding: 2.5rem 0 5rem 0;
-            font-size: 4.5rem;
+            padding: 2.5rem 0;
+            font-size: 3.5rem;
             margin-bottom: 0;
         }
     }

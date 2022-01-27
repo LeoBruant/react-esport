@@ -1,13 +1,13 @@
 {
-  "users": [
-    {
-      "bets": [],
-      "coins": 100,
-      "email": "bruantleo@gmail.com",
-      "password": "5Czm8H@xo!j&8Nn@",
-      "loginToken": "7cclulq6pyc",
-      "username": "Lespectre",
-      "id": 1
-    }
-  ]
+    "users": [
+        {
+            "coins": 100,
+            "email": "bruantleo@gmail.com",
+            "password": "5Czm8H@xo!j&8Nn@",
+            "loginToken": "7cclulq6pyc",
+            "username": "Lespectre",
+            "id": 1
+        }
+    ],
+    "bets": []
 }

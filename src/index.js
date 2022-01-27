@@ -34,7 +34,7 @@ ReactDOM.render(
                 <Route path="/login" element={<Login />} />
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/" element={<Home />} />
-                <Route path="/ligues" element={<Leagues />} />
+                <Route path="/leagues" element={<Leagues />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
