@@ -6,20 +6,13 @@ import Swal from 'sweetalert2'
 import noImage from '../assets/images/no-image.jpg'
 
 export default function Match({
-    begin_at,
     bet,
-    end_at,
     getBets,
     getUser,
-    id,
+    match: { begin_at, end_at, id, name, opponents, results, official_stream_url, winner },
     matchType,
-    name,
-    opponents,
-    results,
     showBet,
-    stream,
-    user,
-    winner
+    user
 }) {
     const [betStatus, setBetStatus] = useState(null)
 
@@ -158,7 +151,7 @@ export default function Match({
                         </p>
 
                         {matchType[0] === 'running' && (
-                            <Button href={stream} target="_blank" variant="primary" className="d-block mx-auto mt-3">
+                            <Button href={official_stream_url} target="_blank" variant="primary" className="d-block mx-auto mt-3">
                                 Visionner
                             </Button>
                         )}

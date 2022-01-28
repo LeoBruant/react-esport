@@ -118,27 +118,20 @@ export default function Home({ getUser, user }) {
                             <section key={matchType[0]} className="matches-container col-12 col-sm-10 col-md-6 col-xl-4">
                                 <h2 className="title">{matchTypes[matchType[0]].title}</h2>
                                 <div className="matches">
-                                    {matchType[1].map(({ begin_at, end_at, id, name, official_stream_url, opponents, results, winner }) => (
+                                    {matchType[1].map((match) => (
                                         <Match
-                                            begin_at={begin_at}
                                             bet={
-                                                bets.filter(({ matchId }) => matchId === id)[0] !== null
-                                                    ? bets.filter(({ matchId }) => matchId === id)[0]
+                                                bets.filter(({ matchId }) => matchId === match.id)[0] !== null
+                                                    ? bets.filter(({ matchId }) => matchId === match.id)[0]
                                                     : null
                                             }
-                                            end_at={end_at}
                                             getBets={getBets}
                                             getUser={getUser}
-                                            id={id}
-                                            key={id}
+                                            key={match.id}
+                                            match={match}
                                             matchType={matchType}
-                                            name={name}
-                                            opponents={opponents}
-                                            results={results}
                                             showBet={showBet}
-                                            stream={official_stream_url}
                                             user={user}
-                                            winner={winner}
                                         />
                                     ))}
                                 </div>

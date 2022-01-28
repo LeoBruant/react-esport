@@ -29,7 +29,7 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/" element={<Home getUser={getUser} user={user} />} />
-                <Route path="/leagues" element={<Leagues user={user} />} />
+                <Route path="/leagues" element={<Leagues />} />
                 {user !== null && <Route path="*" element={<NotFound coins={user.coins} />} />}
             </Routes>
         </BrowserRouter>
