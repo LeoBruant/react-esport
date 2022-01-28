@@ -1,14 +1,6 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
-// Pages
-
-import Login from './pages/Login'
-import Registration from './pages/Registration'
-import Home from './pages/Home'
-import NotFound from './pages/NotFound'
-import Leagues from './pages/Leagues'
+import React from 'react'
+import App from './App.jsx'
 
 // Style
 
@@ -29,15 +21,7 @@ library.add(faCog)
 
 ReactDOM.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/registration" element={<Registration />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/leagues" element={<Leagues />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </BrowserRouter>
+        <App />
     </React.StrictMode>,
     document.getElementById('root')
 )

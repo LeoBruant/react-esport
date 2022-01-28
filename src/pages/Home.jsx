@@ -7,22 +7,22 @@ import Match from '../components/Match'
 import { Spinner } from 'react-bootstrap'
 import Bet from '../components/Bet'
 
-export default function Home() {
-    const [counter, setCounter] = useState(0)
-    const [matches, setMatches] = useState({ passed: [], running: [], upcoming: [] })
-    const [isLoaded, setIsLoaded] = useState(false)
-    const [matchTypes, setMatchTypes] = useState({
+export default function Home({ getUser, user }) {
+    const matchTypes = {
         passed: { title: 'passés' },
         running: { title: 'en cours' },
         upcoming: { title: 'à venir' }
-    })
+    }
+
+    const [counter, setCounter] = useState(0)
+    const [matches, setMatches] = useState({ passed: [], running: [], upcoming: [] })
+    const [isLoaded, setIsLoaded] = useState(false)
     const [matchBet, setMatchBet] = useState({
         id: null,
         name: null,
         opponents: {}
     })
     const [bets, setBets] = useState([])
-    const [user, setUser] = useState(null)
 
     const getMatches = useCallback(() => {
         axios
@@ -62,26 +62,16 @@ export default function Home() {
     }, [counter])
 
     React.useEffect(() => {
-        // Set user
-
-        axios.get('http://localhost:3004/users?id=' + localStorage.id + '&loginToken=' + localStorage.token).then(({ data }) => {
-            setUser(data[0])
-        })
-
-        // Get matches at first load
+        // Get data at first load
 
         if (counter === 0) {
             getMatches()
+            getBets()
         }
-
-        // Get bets
-
-        getBets()
-
-        // Get matches after delay
 
         setTimeout(() => {
             getMatches()
+            getBets()
         }, 60000)
     }, [counter, getMatches])
 
@@ -116,7 +106,7 @@ export default function Home() {
 
     return (
         <>
-            {user !== null && <NavBar userCoins={user.coins} theme="light" />}
+            {user !== null && <NavBar coins={user.coins} theme="light" />}
             <Style>
                 <header className="header">
                     <h1 className="title">Matchs LoL</h1>
@@ -137,13 +127,14 @@ export default function Home() {
                                                     : null
                                             }
                                             end_at={end_at}
+                                            getBets={getBets}
+                                            getUser={getUser}
                                             id={id}
                                             key={id}
                                             matchType={matchType}
                                             name={name}
                                             opponents={opponents}
                                             results={results}
-                                            setCounter={setCounter}
                                             showBet={showBet}
                                             stream={official_stream_url}
                                             user={user}
@@ -155,7 +146,7 @@ export default function Home() {
                         ))}
                 </main>
             </Style>
-            {matchBet.id !== null && <Bet hideBet={hideBet} matchBet={matchBet} setCounter={setCounter} user={user} />}
+            {matchBet.id !== null && <Bet getBets={getBets} getUser={getUser} hideBet={hideBet} matchBet={matchBet} user={user} />}
         </>
     )
 }

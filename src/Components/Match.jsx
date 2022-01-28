@@ -1,6 +1,6 @@
 import axios from 'axios'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import noImage from '../assets/images/no-image.jpg'
@@ -9,25 +9,21 @@ export default function Match({
     begin_at,
     bet,
     end_at,
+    getBets,
+    getUser,
     id,
     matchType,
     name,
     opponents,
     results,
-    setCounter,
     showBet,
     stream,
     user,
     winner
 }) {
-    const [localStorage, setLocalStorage] = useState({
-        id: window.localStorage.getItem('id'),
-        token: window.localStorage.getItem('token')
-    })
-
     const [betStatus, setBetStatus] = useState(null)
 
-    React.useEffect(() => {
+    const checkBet = useCallback(() => {
         // Check if match is passed and has a bet
 
         if (matchType[0] === 'passed' && bet !== undefined) {
@@ -42,29 +38,41 @@ export default function Match({
                 setBetStatus(false)
             }
 
-            // Update database
+            // Update
 
             axios.get('http://localhost:3004/bets/' + bet.id).then(({ data }) => {
-                if (!data.ended) {
-                    axios.patch('http://localhost:3004/bets/' + bet.id, { ended: true })
+                // Check if bet has ended
 
-                    if (coins !== 0) {
+                if (!data.ended) {
+                    // Update bets
+
+                    axios.patch('http://localhost:3004/bets/' + bet.id, { ended: true }).then(() => {
+                        getBets()
+                    })
+
+                    // Update coins if bet is won
+
+                    if (betStatus === true) {
                         axios
                             .patch('http://localhost:3004/users/' + localStorage.id, {
                                 coins: user.coins + coins
                             })
                             .then(() => {
-                                setCounter((oldCounter) => {
-                                    return oldCounter + 1
-                                })
+                                getUser()
                             })
                     }
                 }
             })
         }
-    }, [bet, localStorage, matchType, user, winner])
+    }, [bet, betStatus, getBets, getUser, matchType, user, winner])
+
+    React.useEffect(() => {
+        checkBet()
+    }, [checkBet])
 
     const cancelBet = () => {
+        // Show popup
+
         Swal.fire({
             icon: 'question',
             title: "Êtes-vous sûr d'annuler ce pari ?",
@@ -72,25 +80,32 @@ export default function Match({
             confirmButtonText: 'Oui',
             showCancelButton: true,
             cancelButtonText: 'Non'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.patch('http://localhost:3004/users/' + localStorage.id, {
-                    coins: user.coins + bet.coins
-                })
-                axios.delete('http://localhost:3004/bets/' + bet.id).then(() => {
-                    setCounter((oldCounter) => {
-                        return oldCounter + 1
-                    })
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Pari annulé',
-                        confirmButtonColor: '#157347',
-                        timer: 1000
-                    })
-                })
-            }
         })
+
+            // Update database
+
+            .then((result) => {
+                if (result.isConfirmed) {
+                    axios.patch('http://localhost:3004/users/' + localStorage.id, {
+                        coins: user.coins + bet.coins
+                    })
+                    axios.delete('http://localhost:3004/bets/' + bet.id).then(() => {
+                        // Update
+
+                        getBets()
+                        getUser()
+
+                        // Show confirmation
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pari annulé',
+                            confirmButtonColor: '#157347',
+                            timer: 1000
+                        })
+                    })
+                }
+            })
     }
 
     const getMatchBorder = () => {
@@ -125,7 +140,7 @@ export default function Match({
                             vs
                         </p>
                         {bet !== undefined && (
-                            <Button onClick={() => cancelBet()} variant="danger" className="d-block mx-auto mt-3">
+                            <Button onClick={cancelBet} variant="danger" className="d-block mx-auto mt-3">
                                 Annuler
                             </Button>
                         )}

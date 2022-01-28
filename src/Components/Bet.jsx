@@ -3,11 +3,7 @@ import axios from 'axios'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 
-export default function Bet({ hideBet, matchBet, setCounter, user }) {
-    const [localStorage, setLocalStorage] = useState({
-        id: window.localStorage.getItem('id'),
-        token: window.localStorage.getItem('token')
-    })
+export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
     const [form, setForm] = useState({
         coins: '',
         winner: ''
@@ -59,7 +55,7 @@ export default function Bet({ hideBet, matchBet, setCounter, user }) {
             }
         })
 
-        // Create bet
+        // Check if all fields are filled
 
         if (filled) {
             let bet = {
@@ -95,16 +91,27 @@ export default function Bet({ hideBet, matchBet, setCounter, user }) {
             else {
                 axios
                     .all([
-                        axios.patch('http://localhost:3004/users/' + localStorage.id, {
-                            coins: user.coins - bet.coins
-                        }),
-                        axios.post('http://localhost:3004/bets', bet)
+                        // Update coins
+
+                        axios
+                            .patch('http://localhost:3004/users/' + localStorage.id, {
+                                coins: user.coins - bet.coins
+                            })
+                            .then(() => {
+                                getUser()
+                            }),
+
+                        // Update bets
+
+                        axios.post('http://localhost:3004/bets', bet).then(() => {
+                            getBets()
+                        })
                     ])
+
+                    // Show confirmation
+
                     .then(() => {
                         hideBet()
-                        setCounter((oldCounter) => {
-                            return oldCounter + 1
-                        })
 
                         Swal.fire({
                             icon: 'success',
