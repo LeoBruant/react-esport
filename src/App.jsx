@@ -1,14 +1,14 @@
 import axios from 'axios'
-import React, { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import React, { useState } from 'react'
 
 // Pages
 
-import Login from './pages/Login'
-import Registration from './pages/Registration'
 import Home from './pages/Home'
-import NotFound from './pages/NotFound'
 import Leagues from './pages/Leagues'
+import Login from './pages/Login'
+import NotFound from './pages/NotFound'
+import Registration from './pages/Registration'
 
 export default function App() {
     const [user, setUser] = useState(null)
@@ -20,16 +20,18 @@ export default function App() {
     }
 
     React.useEffect(() => {
-        getUser()
+        if (localStorage.id !== undefined && localStorage.token !== undefined) {
+            getUser()
+        }
     }, [])
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/registration" element={<Registration />} />
                 <Route path="/" element={<Home getUser={getUser} user={user} />} />
                 <Route path="/leagues" element={<Leagues />} />
+                <Route path="/login" element={<Login getUser={getUser} />} />
+                <Route path="/registration" element={<Registration />} />
                 {user !== null && <Route path="*" element={<NotFound coins={user.coins} />} />}
             </Routes>
         </BrowserRouter>

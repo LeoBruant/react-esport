@@ -4,7 +4,7 @@ import { Form, Container, Button } from 'react-bootstrap'
 import { Style } from '../style/Login'
 import { Link, useNavigate } from 'react-router-dom'
 
-export default function Login() {
+export default function Login({ getUser }) {
     const navigate = useNavigate()
 
     const [form, setForm] = useState({
@@ -64,14 +64,14 @@ export default function Login() {
             axios.get('http://localhost:3004/users').then(({ data }) => {
                 // Check if username exists
 
-                data.every(({ id, loginToken, password, username }) => {
+                data.forEach(({ id, loginToken, password, username }) => {
                     if (username === form.username) {
                         if (password === form.password) {
                             window.localStorage.setItem('id', id)
                             window.localStorage.setItem('token', loginToken)
 
+                            getUser()
                             navigate('/')
-                            return true
                         } else {
                             setErrorMessages((oldErrorMessages) => {
                                 return {
@@ -79,7 +79,6 @@ export default function Login() {
                                     password: 'Mot de passe invalide'
                                 }
                             })
-                            return false
                         }
                     } else {
                         setErrorMessages((oldErrorMessages) => {
@@ -88,7 +87,6 @@ export default function Login() {
                                 username: "Cet utilisateur n'existe pas"
                             }
                         })
-                        return false
                     }
                 })
             })

@@ -107,7 +107,6 @@ export default function Registration() {
                         // Create user
                         else {
                             let request = {
-                                bets: [],
                                 coins: 100,
                                 email: form.email,
                                 name: form.name,

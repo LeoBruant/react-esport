@@ -1,12 +1,13 @@
 import axios from 'axios'
-import moment from 'moment'
-import React, { useCallback, useState } from 'react'
 import { Button } from 'react-bootstrap'
-import Swal from 'sweetalert2'
+import moment from 'moment'
 import noImage from '../assets/images/no-image.jpg'
+import React, { useCallback, useState } from 'react'
+import Swal from 'sweetalert2'
 
 export default function Match({
     bet,
+    bets,
     getBets,
     getUser,
     match: { begin_at, end_at, id, name, opponents, results, official_stream_url, winner },
@@ -15,6 +16,44 @@ export default function Match({
     user
 }) {
     const [betStatus, setBetStatus] = useState(null)
+
+    const cancelBet = () => {
+        // Show popup
+
+        Swal.fire({
+            icon: 'question',
+            title: "Êtes-vous sûr d'annuler ce pari ?",
+            confirmButtonColor: '#bb2d3b',
+            confirmButtonText: 'Oui',
+            showCancelButton: true,
+            cancelButtonText: 'Non'
+        })
+
+            // Update database
+
+            .then((result) => {
+                if (result.isConfirmed) {
+                    axios.patch('http://localhost:3004/users/' + localStorage.id, {
+                        coins: user.coins + bet.coins
+                    })
+                    axios.delete('http://localhost:3004/bets/' + bet.id).then(() => {
+                        // Update
+
+                        getBets()
+                        getUser()
+
+                        // Show confirmation
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pari annulé',
+                            confirmButtonColor: '#157347',
+                            timer: 1000
+                        })
+                    })
+                }
+            })
+    }
 
     const checkBet = useCallback(() => {
         // Check if match is passed and has a bet
@@ -59,48 +98,6 @@ export default function Match({
         }
     }, [bet, betStatus, getBets, getUser, matchType, user, winner])
 
-    React.useEffect(() => {
-        checkBet()
-    }, [checkBet])
-
-    const cancelBet = () => {
-        // Show popup
-
-        Swal.fire({
-            icon: 'question',
-            title: "Êtes-vous sûr d'annuler ce pari ?",
-            confirmButtonColor: '#bb2d3b',
-            confirmButtonText: 'Oui',
-            showCancelButton: true,
-            cancelButtonText: 'Non'
-        })
-
-            // Update database
-
-            .then((result) => {
-                if (result.isConfirmed) {
-                    axios.patch('http://localhost:3004/users/' + localStorage.id, {
-                        coins: user.coins + bet.coins
-                    })
-                    axios.delete('http://localhost:3004/bets/' + bet.id).then(() => {
-                        // Update
-
-                        getBets()
-                        getUser()
-
-                        // Show confirmation
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pari annulé',
-                            confirmButtonColor: '#157347',
-                            timer: 1000
-                        })
-                    })
-                }
-            })
-    }
-
     const getMatchBorder = () => {
         if (betStatus === true) {
             return { border: '2px solid #0d0' }
@@ -110,6 +107,10 @@ export default function Match({
             return { borderBottom: '2px solid #ddd' }
         }
     }
+
+    React.useEffect(() => {
+        checkBet()
+    }, [checkBet])
 
     return (
         <div className="p-4 match" style={getMatchBorder()}>
@@ -121,9 +122,9 @@ export default function Match({
                 <div className="d-flex align-items-center flex-column">
                     <h4 className="text-center">{opponents[0] !== undefined ? opponents[0].opponent.acronym : 'Unknown'}</h4>
                     <img
+                        alt={opponents[0] !== undefined ? opponents[0].opponent.name + ' image' : 'no image'}
                         className="mt-3"
                         src={opponents[0] !== undefined ? opponents[0].opponent.image_url : noImage}
-                        alt={opponents[0] !== undefined ? opponents[0].opponent.name + ' image' : 'no image'}
                         style={{ width: '100px', height: '100px' }}
                     ></img>
                 </div>
@@ -133,12 +134,12 @@ export default function Match({
                             vs
                         </p>
                         {bet !== undefined && (
-                            <Button onClick={cancelBet} variant="danger" className="d-block mx-auto mt-3">
+                            <Button className="d-block mx-auto mt-3" onClick={cancelBet} variant="danger">
                                 Annuler
                             </Button>
                         )}
                         {bet === undefined && opponents[0] !== undefined && opponents[1] !== undefined && (
-                            <Button onClick={() => showBet(id, name, opponents)} variant="success" className="d-block mx-auto mt-3">
+                            <Button className="d-block mx-auto mt-3" onClick={() => showBet(id, name, opponents)} variant="success">
                                 Parier
                             </Button>
                         )}
@@ -151,7 +152,7 @@ export default function Match({
                         </p>
 
                         {matchType[0] === 'running' && (
-                            <Button href={official_stream_url} target="_blank" variant="primary" className="d-block mx-auto mt-3">
+                            <Button className="d-block mx-auto mt-3" href={official_stream_url} target="_blank" variant="primary">
                                 Visionner
                             </Button>
                         )}
@@ -160,13 +161,16 @@ export default function Match({
                 <div>
                     <h4 className="text-center">{opponents[1] !== undefined ? opponents[1].opponent.acronym : 'Unknown'}</h4>
                     <img
+                        alt={opponents[1] !== undefined ? opponents[1].opponent.name + ' image' : 'no image'}
                         className="mt-3"
                         src={opponents[1] !== undefined ? opponents[1].opponent.image_url : noImage}
-                        alt={opponents[1] !== undefined ? opponents[1].opponent.name + ' image' : 'no image'}
                         style={{ width: '100px', height: '100px' }}
                     ></img>
                 </div>
             </div>
+            <p className="text-center m-0">
+                {bets.length === 0 ? 'Aucun' : bets.length} pari{bets.length > 1 ? 's' : ''}
+            </p>
         </div>
     )
 }

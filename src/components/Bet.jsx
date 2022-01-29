@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, Form, Modal } from 'react-bootstrap'
+import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 
 export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
-    const [form, setForm] = useState({
+    const [errorMessages, setErrorMessages] = useState({
         coins: '',
         winner: ''
     })
-    const [errorMessages, setErrorMessages] = useState({
+
+    const [form, setForm] = useState({
         coins: '',
         winner: ''
     })
@@ -134,34 +135,34 @@ export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
                     <h4 className="text-center pb-5">Parier sur le gagnant</h4>
                     <Form.Group className="d-flex justify-content-center">
                         <Form.Check
+                            className={`${errorMessages.winner !== '' ? 'input-error' : ''}`}
                             inline
                             label={matchBet.opponents[0].opponent.name}
                             name="opponents"
+                            onInput={(e) => handleInput('winner', e.target.value)}
                             type="radio"
                             value={matchBet.opponents[0].opponent.id}
-                            onInput={(e) => handleInput('winner', e.target.value)}
-                            className={`${errorMessages.winner !== '' ? 'input-error' : ''}`}
                         />
                         <Form.Check
+                            className={`${errorMessages.winner !== '' ? 'input-error' : ''}`}
                             inline
                             label={matchBet.opponents[1].opponent.name}
                             name="opponents"
+                            onInput={(e) => handleInput('winner', e.target.value)}
                             type="radio"
                             value={matchBet.opponents[1].opponent.id}
-                            onInput={(e) => handleInput('winner', e.target.value)}
-                            className={`${errorMessages.winner !== '' ? 'input-error' : ''}`}
                         />
                     </Form.Group>
                     <p className="error-message mb-4">{errorMessages.winner}</p>
                     <Form.Group className="d-flex justify-content-center align-items-center">
                         <Form.Label>Jetons : ({user.coins} max)</Form.Label>
                         <Form.Control
-                            type="number"
+                            className={`${errorMessages.coins !== '' ? 'input-error mx-2' : 'mx-2'}`}
                             min={1}
                             max={user.coins}
-                            style={{ width: '7.5rem' }}
                             onInput={(e) => handleInput('coins', e.target.value)}
-                            className={`${errorMessages.coins !== '' ? 'input-error mx-2' : 'mx-2'}`}
+                            style={{ width: '7.5rem' }}
+                            type="number"
                         />
                     </Form.Group>
                     <p className="error-message">{errorMessages.coins}</p>

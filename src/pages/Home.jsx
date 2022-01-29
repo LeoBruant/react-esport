@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
 import axios from 'axios'
-import pandascore from '../components/Pandascore'
-import { Style } from '../style/Home.js'
-import NavBar from '../components/NavBar'
-import Match from '../components/Match'
-import { Spinner } from 'react-bootstrap'
 import Bet from '../components/Bet'
+import Match from '../components/Match'
+import NavBar from '../components/NavBar'
+import pandascore from '../components/Pandascore'
+import React, { useCallback, useState } from 'react'
+import { Spinner } from 'react-bootstrap'
+import { Style } from '../style/Home.js'
 
 export default function Home({ getUser, user }) {
     const matchTypes = {
@@ -14,17 +14,23 @@ export default function Home({ getUser, user }) {
         upcoming: { title: 'à venir' }
     }
 
+    const [bets, setBets] = useState([])
     const [counter, setCounter] = useState(0)
-    const [matches, setMatches] = useState({ passed: [], running: [], upcoming: [] })
     const [isLoaded, setIsLoaded] = useState(false)
     const [matchBet, setMatchBet] = useState({
         id: null,
         name: null,
         opponents: {}
     })
-    const [bets, setBets] = useState([])
+    const [matches, setMatches] = useState({ passed: [], running: [], upcoming: [] })
 
-    const getMatches = useCallback(() => {
+    const getBets = () => {
+        axios.get('http://localhost:3004/bets').then(({ data }) => {
+            setBets(data)
+        })
+    }
+
+    const getData = useCallback(() => {
         axios
             .all([
                 pandascore.get('lol/matches/past?per_page=100').then(({ data }) => {
@@ -50,38 +56,15 @@ export default function Home({ getUser, user }) {
                             upcoming: data
                         }
                     })
+                }),
+                axios.get('http://localhost:3004/bets').then(({ data }) => {
+                    setBets(data)
                 })
             ])
             .then(() => {
-                if (counter === 0) {
-                    setIsLoaded(true)
-                }
-
-                setCounter(counter + 1)
+                setIsLoaded(true)
             })
-    }, [counter])
-
-    React.useEffect(() => {
-        // Get data at first load
-
-        if (counter === 0) {
-            getMatches()
-            getBets()
-        }
-
-        setTimeout(() => {
-            getMatches()
-            getBets()
-        }, 60000)
-    }, [counter, getMatches])
-
-    const showBet = (id, name, opponents) => {
-        setMatchBet({
-            id,
-            name,
-            opponents
-        })
-    }
+    }, [])
 
     const hideBet = () => {
         setMatchBet({
@@ -91,22 +74,32 @@ export default function Home({ getUser, user }) {
         })
     }
 
-    const getBets = () => {
-        axios
-            .get(
-                'http://localhost:3004/bets?userId=' +
-                    window.localStorage.getItem('id') +
-                    '&loginToken=' +
-                    window.localStorage.getItem('token')
-            )
-            .then(({ data }) => {
-                setBets(data)
-            })
+    const showBet = (id, name, opponents) => {
+        setMatchBet({
+            id,
+            name,
+            opponents
+        })
     }
+
+    React.useEffect(() => {
+        // Get data at first load
+
+        if (counter === 0) {
+            getData()
+            setCounter(counter + 1)
+        }
+
+        // Update data
+
+        setTimeout(() => {
+            getData()
+        }, 60000)
+    }, [counter, getData])
 
     return (
         <>
-            {user !== null && <NavBar coins={user.coins} theme="light" />}
+            <NavBar coins={user !== null ? user.coins : null} theme="light" />
             <Style>
                 <header className="header">
                     <h1 className="title">Matchs LoL</h1>
@@ -115,15 +108,25 @@ export default function Home({ getUser, user }) {
                 <main className="main container">
                     {isLoaded &&
                         Object.entries(matches).map((matchType) => (
-                            <section key={matchType[0]} className="matches-container col-12 col-sm-10 col-md-6 col-xl-4">
+                            <section className="matches-container col-12 col-sm-10 col-md-6 col-xl-4" key={matchType[0]}>
                                 <h2 className="title">{matchTypes[matchType[0]].title}</h2>
                                 <div className="matches">
                                     {matchType[1].map((match) => (
                                         <Match
                                             bet={
-                                                bets.filter(({ matchId }) => matchId === match.id)[0] !== null
-                                                    ? bets.filter(({ matchId }) => matchId === match.id)[0]
+                                                bets.filter(
+                                                    ({ matchId, userId }) => matchId === match.id && userId === parseInt(localStorage.id)
+                                                )[0] !== null
+                                                    ? bets.filter(
+                                                          ({ matchId, userId }) =>
+                                                              matchId === match.id && userId === parseInt(localStorage.id)
+                                                      )[0]
                                                     : null
+                                            }
+                                            bets={
+                                                bets.filter(({ matchId }) => matchId === match.id).length !== 0
+                                                    ? bets.filter(({ matchId }) => matchId === match.id)
+                                                    : []
                                             }
                                             getBets={getBets}
                                             getUser={getUser}
