@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import NavBar from './components/NavBar'
 import React, { useState } from 'react'
 
 // Pages
@@ -9,6 +10,7 @@ import Leagues from './pages/Leagues'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Registration from './pages/Registration'
+import Teams from './pages/Teams'
 
 export default function App() {
     const [user, setUser] = useState(null)
@@ -27,12 +29,14 @@ export default function App() {
 
     return (
         <BrowserRouter>
+            {user !== null && <NavBar coins={user.coins} theme="dark" />}
             <Routes>
                 <Route path="/" element={<Home getUser={getUser} user={user} />} />
                 <Route path="/leagues" element={<Leagues />} />
                 <Route path="/login" element={<Login getUser={getUser} />} />
                 <Route path="/registration" element={<Registration />} />
-                {user !== null && <Route path="*" element={<NotFound coins={user.coins} />} />}
+                <Route path="/teams" element={<Teams />} />
+                {user !== null && <Route path="*" element={<NotFound />} />}
             </Routes>
         </BrowserRouter>
     )

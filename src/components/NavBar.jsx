@@ -25,6 +25,12 @@ export default function NavBar({ coins, theme }) {
                         <Link to="/leagues" className="nav-link">
                             Ligues
                         </Link>
+                        <Link to="/teams" className="nav-link">
+                            Équipes
+                        </Link>
+                        <Link to="/players" className="nav-link">
+                            Joueurs
+                        </Link>
                     </Nav>
                     <Nav className="flex-row">
                         <Navbar.Text>{coins} Jetons</Navbar.Text>

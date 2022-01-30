@@ -1,7 +1,6 @@
 import axios from 'axios'
 import Bet from '../components/Bet'
 import Match from '../components/Match'
-import NavBar from '../components/NavBar'
 import pandascore from '../components/Pandascore'
 import React, { useCallback, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
@@ -99,7 +98,6 @@ export default function Home({ getUser, user }) {
 
     return (
         <>
-            <NavBar coins={user !== null ? user.coins : null} theme="light" />
             <Style>
                 <header className="header">
                     <h1 className="title">Matchs LoL</h1>

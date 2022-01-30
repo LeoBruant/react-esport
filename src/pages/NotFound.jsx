@@ -1,10 +1,8 @@
 import { Style } from '../style/NotFound.js'
-import NavBar from '../components/NavBar'
 
-export default function NotFound({ coins }) {
+export default function NotFound() {
     return (
-        <Style>
-            <NavBar coins={coins} theme="dark" />
+        <Style style={{ height: 'calc(100vh - ' + document.querySelector('nav').offsetHeight + 'px)' }}>
             <div className="body">
                 <div title="404" className="text">
                     404
