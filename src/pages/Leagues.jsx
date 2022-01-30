@@ -31,7 +31,7 @@ export default function Leagues() {
                         <div className="league" key={id}>
                             <p className="name">{name}</p>
                             <div className="image-container">
-                                <a href={url} target="_blank" rel="noreferrer">
+                                <a href={url} target="_blank">
                                     <img className="image" src={image_url !== null ? image_url : noImage} alt={name + ' image'}></img>
                                 </a>
                             </div>

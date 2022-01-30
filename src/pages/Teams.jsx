@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import pandascore from '../components/Pandascore'
 import { Style } from '../style/Teams.js'
 import { Spinner } from 'react-bootstrap'
+import live from '../assets/images/live.png'
 import noImage from '../assets/images/no-image.jpg'
 import Team from '../components/Team'
 
@@ -15,12 +16,16 @@ export default function Teams() {
     const getMatches = useCallback(() => {
         pandascore.get('lol/matches/running?per_page=100').then(({ data }) => {
             teams.forEach(({ id }) => {
-                setMatches((oldMatches) => {
-                    return {
-                        ...oldMatches,
-                        [id]: data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
-                    }
-                })
+                let match = data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
+
+                if (match.length !== 0) {
+                    setMatches((oldMatches) => {
+                        return {
+                            ...oldMatches,
+                            [id]: data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
+                        }
+                    })
+                }
             })
         })
     }, [teams])
@@ -41,7 +46,7 @@ export default function Teams() {
 
                 setCounter(counter + 1)
             })
-    }, [getMatches])
+    }, [counter, getMatches])
 
     const hideTeam = () => {
         setTeam(null)
@@ -75,17 +80,19 @@ export default function Teams() {
                 {isLoaded && (
                     <main className="main container">
                         <div className="teams">
-                            {teams.map(({ acronym, id, image_url, location, name, players, url }) => (
+                            {teams.map(({ acronym, id, image_url, location, name, players }) => (
                                 <div className="team" key={id} onClick={() => showTeam(location, name, players)}>
-                                    <p className="name">{acronym !== null ? acronym : name}</p>
+                                    <div className="name-container">
+                                        <p className="name">{acronym !== null ? acronym : name}</p>
+                                        {matches[id] !== undefined && (
+                                            <a href={matches[id].official_stream_url}>
+                                                <img alt="live" className="live" src={live} />
+                                            </a>
+                                        )}
+                                    </div>
+
                                     <div className="image-container">
-                                        <a href={url} target="_blank" rel="noreferrer">
-                                            <img
-                                                className="image"
-                                                src={image_url !== null ? image_url : noImage}
-                                                alt={name + ' image'}
-                                            ></img>
-                                        </a>
+                                        <img className="image" src={image_url !== null ? image_url : noImage} alt={name + ' image'}></img>
                                     </div>
                                 </div>
                             ))}

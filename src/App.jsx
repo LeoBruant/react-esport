@@ -29,7 +29,7 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            {user !== null && <NavBar coins={user.coins} theme="dark" />}
+            <NavBar coins={user !== null ? user.coins : null} theme="dark" />
             <Routes>
                 <Route path="/" element={<Home getUser={getUser} user={user} />} />
                 <Route path="/leagues" element={<Leagues />} />

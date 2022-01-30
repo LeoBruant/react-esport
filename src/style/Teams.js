@@ -36,9 +36,21 @@ export const Style = styled.div`
                     border-color: #ddd;
                 }
 
-                .name {
-                    text-align: center;
-                    font-size: 1.25rem;
+                .name-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .name {
+                        text-align: center;
+                        font-size: 1.25rem;
+                        margin-bottom: 0;
+                    }
+
+                    .live {
+                        margin-left: 0.25rem;
+                        height: 3.5rem;
+                    }
                 }
 
                 .image-container {
