@@ -21,49 +21,9 @@ export const Style = styled.div`
             flex-wrap: wrap;
             justify-content: space-between;
 
-            .team {
-                padding: 2rem;
-                display: flex;
-                flex-direction: column;
-                height: 250px;
-                margin: 1rem auto;
-                width: 250px;
-                border: 2px solid transparent;
-                border-radius: 0.25rem;
-
-                &:hover {
-                    cursor: pointer;
-                    border-color: #ddd;
-                }
-
-                .name-container {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                    .name {
-                        text-align: center;
-                        font-size: 1.25rem;
-                        margin-bottom: 0;
-                    }
-
-                    .live {
-                        margin-left: 0.25rem;
-                        height: 3.5rem;
-                    }
-                }
-
-                .image-container {
-                    display: flex;
-                    height: 100%;
-                    align-items: center;
-                    justify-content: center;
-
-                    .image {
-                        max-height: 150px;
-                        max-width: 100%;
-                    }
-                }
+            .team:hover {
+                cursor: pointer;
+                border-color: #ddd !important;
             }
         }
     }

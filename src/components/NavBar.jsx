@@ -24,7 +24,7 @@ export default function NavBar({ coins, theme }) {
                             <Link to="/leagues" className="nav-link">
                                 Ligues
                             </Link>
-                            <Link to="/teams?page=1" className="nav-link">
+                            <Link to="/teams/1" className="nav-link">
                                 Équipes
                             </Link>
                             <Link to="/players" className="nav-link">

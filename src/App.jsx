@@ -35,7 +35,7 @@ export default function App() {
                 <Route path="/leagues" element={<Leagues />} />
                 <Route path="/login" element={<Login getUser={getUser} />} />
                 <Route path="/registration" element={<Registration />} />
-                <Route path="/teams" element={<Teams />} />
+                <Route path="/teams/:page" element={<Teams />} />
                 {user !== null && <Route path="*" element={<NotFound />} />}
             </Routes>
         </BrowserRouter>
