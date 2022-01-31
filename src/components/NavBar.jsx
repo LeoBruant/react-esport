@@ -1,7 +1,6 @@
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
-import Redirect from './Redirect'
 import { useNavigate } from 'react-router-dom'
 
 export default function NavBar({ coins, theme }) {
@@ -15,7 +14,6 @@ export default function NavBar({ coins, theme }) {
 
     return (
         <>
-            <Redirect />
             {coins !== null && (
                 <Navbar bg={theme} expand="lg" variant={theme}>
                     <Container>
@@ -26,7 +24,7 @@ export default function NavBar({ coins, theme }) {
                             <Link to="/leagues" className="nav-link">
                                 Ligues
                             </Link>
-                            <Link to="/teams" className="nav-link">
+                            <Link to="/teams?page=1" className="nav-link">
                                 Équipes
                             </Link>
                             <Link to="/players" className="nav-link">

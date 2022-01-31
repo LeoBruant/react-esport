@@ -186,7 +186,7 @@ export default function Registration() {
                     </Button>
                 </Form>
                 <p className="login">
-                    Déja inscrit ? Connectez-vous <Link to="/login">Ici</Link>
+                    Déjà inscrit ? Connectez-vous <Link to="/login">Ici</Link>
                 </p>
             </Container>
         </Style>

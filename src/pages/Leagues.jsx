@@ -3,6 +3,7 @@ import pandascore from '../components/Pandascore'
 import { Style } from '../style/Leagues.js'
 import { Spinner } from 'react-bootstrap'
 import noImage from '../assets/images/no-image.jpg'
+import Redirect from '../components/Redirect'
 
 export default function Leagues() {
     const [leagues, setLeagues] = useState([])
@@ -20,25 +21,28 @@ export default function Leagues() {
     }, [])
 
     return (
-        <Style>
-            <header className="header">
-                <h1 className="title">Ligues LoL</h1>
-            </header>
-            {!isLoaded && <Spinner animation="border" className="spinner" />}
-            <main className="main container">
-                <div className="leagues">
-                    {leagues.map(({ id, image_url, name, url }) => (
-                        <div className="league" key={id}>
-                            <p className="name">{name}</p>
-                            <div className="image-container">
-                                <a href={url} target="_blank">
-                                    <img className="image" src={image_url !== null ? image_url : noImage} alt={name + ' image'}></img>
-                                </a>
+        <>
+            <Redirect />
+            <Style>
+                <header className="header">
+                    <h1 className="title">Ligues LoL</h1>
+                </header>
+                {!isLoaded && <Spinner animation="border" className="spinner" />}
+                <main className="main container">
+                    <div className="leagues">
+                        {leagues.map(({ id, image_url, name, url }) => (
+                            <div className="league" key={id}>
+                                <p className="name">{name}</p>
+                                <div className="image-container">
+                                    <a href={url} rel="noreferrer" target="_blank">
+                                        <img className="image" src={image_url !== null ? image_url : noImage} alt={name + ' image'}></img>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            </main>
-        </Style>
+                        ))}
+                    </div>
+                </main>
+            </Style>
+        </>
     )
 }

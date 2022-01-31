@@ -3,6 +3,7 @@ import Bet from '../components/Bet'
 import Match from '../components/Match'
 import pandascore from '../components/Pandascore'
 import React, { useCallback, useState } from 'react'
+import Redirect from '../components/Redirect'
 import { Spinner } from 'react-bootstrap'
 import { Style } from '../style/Home.js'
 
@@ -98,6 +99,7 @@ export default function Home({ getUser, user }) {
 
     return (
         <>
+            <Redirect />
             <Style>
                 <header className="header">
                     <h1 className="title">Matchs LoL</h1>
