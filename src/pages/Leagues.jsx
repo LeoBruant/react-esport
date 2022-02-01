@@ -23,7 +23,7 @@ export default function Leagues() {
     }
 
     React.useEffect(() => {
-        let perPage = 10
+        let perPage = 25
 
         pandascore
             .get('lol/leagues', { params: { per_page: perPage, page } })

@@ -23,7 +23,7 @@ export default function Players() {
     }
 
     React.useEffect(() => {
-        let perPage = 100
+        let perPage = 25
 
         pandascore
             .get('lol/players', { params: { per_page: perPage, page } })

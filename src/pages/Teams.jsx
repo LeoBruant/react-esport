@@ -38,7 +38,7 @@ export default function Teams() {
     }
 
     React.useEffect(() => {
-        let perPage = 100
+        let perPage = 25
 
         // Get teams
 
