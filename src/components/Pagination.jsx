@@ -1,19 +1,6 @@
 import { Pagination } from 'react-bootstrap'
-import React, { useState } from 'react'
 
 export default function PaginationCustom({ changePage, elementsNumber, page }) {
-    const [pages, setPages] = useState([])
-
-    React.useEffect(() => {
-        let pageArrays = []
-
-        for (let i = 0; i < elementsNumber; i++) {
-            pageArrays.push([])
-        }
-
-        setPages(pageArrays)
-    }, [elementsNumber])
-
     return (
         <Pagination className="justify-content-center">
             <Pagination.First disabled={parseInt(page) === 1} onClick={() => (parseInt(page) !== 1 ? changePage(1) : '')} />
