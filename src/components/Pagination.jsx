@@ -15,9 +15,9 @@ export default function PaginationCustom({ changePage, elementsNumber, page }) {
     }, [elementsNumber])
 
     return (
-        <Pagination className="justify-content-center">
-            {/* <Pagination.First onClick={() => (parseInt(page) !== 1 ? changePage(1) : '')} />
-            <Pagination.Prev onClick={() => (parseInt(page) > 1 ? changePage(parseInt(page) - 1) : '')} /> */}
+        <Pagination className="justify-content-center container-fluid flex-wrap">
+            <Pagination.First onClick={() => (parseInt(page) !== 1 ? changePage(1) : '')} />
+            <Pagination.Prev onClick={() => (parseInt(page) > 1 ? changePage(parseInt(page) - 1) : '')} />
             {pages.map((array, index) => (
                 <Pagination.Item
                     active={parseInt(page) === index + 1}
@@ -27,8 +27,8 @@ export default function PaginationCustom({ changePage, elementsNumber, page }) {
                     {index + 1}
                 </Pagination.Item>
             ))}
-            {/* <Pagination.Next onClick={() => (parseInt(page) < elementsNumber ? changePage(parseInt(page) + 1) : '')} />
-            <Pagination.Last onClick={() => (parseInt(page) !== Math.ceil(elementsNumber) ? changePage(Math.ceil(elementsNumber)) : '')} /> */}
+            <Pagination.Next onClick={() => (parseInt(page) < elementsNumber ? changePage(parseInt(page) + 1) : '')} />
+            <Pagination.Last onClick={() => (parseInt(page) !== Math.ceil(elementsNumber) ? changePage(Math.ceil(elementsNumber)) : '')} />
         </Pagination>
     )
 }

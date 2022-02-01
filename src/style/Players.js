@@ -16,7 +16,7 @@ export const Style = styled.div`
     }
 
     .main {
-        .leagues {
+        .players {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;

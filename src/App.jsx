@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import Home from './pages/Home'
 import Leagues from './pages/Leagues'
 import Login from './pages/Login'
+import Players from './pages/Players'
 import NotFound from './pages/NotFound'
 import Registration from './pages/Registration'
 import Teams from './pages/Teams'
@@ -34,6 +35,7 @@ export default function App() {
                 <Route path="/" element={<Home getUser={getUser} user={user} />} />
                 <Route path="/leagues/:page" element={<Leagues />} />
                 <Route path="/login" element={<Login getUser={getUser} />} />
+                <Route path="/players/:page" element={<Players />} />
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/teams/:page" element={<Teams />} />
                 {user !== null && <Route path="*" element={<NotFound />} />}
