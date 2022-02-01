@@ -1,6 +1,6 @@
 import PaginationCustom from '../components/Pagination'
 import pandascore from '../components/Pandascore'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import Redirect from '../components/Redirect'
 import { Spinner } from 'react-bootstrap'
 import { Style } from '../style/Teams.js'
@@ -9,58 +9,21 @@ import TeamInfo from '../components/TeamInfo'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function Teams() {
-    const { page } = useParams()
+    let { page } = useParams()
 
     const navigate = useNavigate()
 
-    const [counter, setCounter] = useState(0)
     const [isLoaded, setIsLoaded] = useState(false)
     const [matches, setMatches] = useState({})
+    const [pagesNumber, setPagesNumber] = useState(0)
     const [team, setTeam] = useState(null)
     const [teams, setTeams] = useState([])
-    const [pagesNumber, setPagesNumber] = useState(0)
 
-    const changePage = (page) => {
-        navigate('/teams/' + page)
-        getTeams()
+    const changePage = (newPage) => {
+        navigate('/teams/' + newPage)
+        page = newPage
+        setIsLoaded(false)
     }
-
-    const getTeams = useCallback(() => {
-        let perPage = 50
-
-        pandascore.get('lol/teams', { params: { per_page: perPage, page } }).then((response) => {
-            setCounter((oldCounter) => {
-                return oldCounter + 1
-            })
-
-            setTeams(response.data)
-
-            // Get pages number
-
-            setPagesNumber(response.headers['x-total'] / perPage)
-
-            // Get matches
-
-            pandascore.get('lol/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
-                teams.forEach(({ id }) => {
-                    let match = data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
-
-                    if (match.length !== 0) {
-                        setMatches((oldMatches) => {
-                            return {
-                                ...oldMatches,
-                                [id]: data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
-                            }
-                        })
-                    }
-                })
-            })
-
-            if (counter === 0) {
-                setIsLoaded(true)
-            }
-        })
-    }, [counter, page, teams])
 
     const hideTeam = () => {
         setTeam(null)
@@ -75,18 +38,38 @@ export default function Teams() {
     }
 
     React.useEffect(() => {
-        // Get data at first load
+        let perPage = 100
 
-        if (counter === 0) {
-            getTeams()
-        }
+        // Get teams
 
-        // Update data
+        pandascore.get('lol/teams', { params: { per_page: perPage, page } }).then((response) => {
+            setTeams(response.data)
 
-        setTimeout(() => {
-            getTeams()
-        }, 60000)
-    }, [counter, getTeams])
+            // Get pages number
+
+            setPagesNumber(response.headers['x-total'] / perPage)
+
+            // Get matches
+
+            pandascore.get('lol/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
+                let newMatches = data
+
+                teams.forEach(({ id }) => {
+                    let match = data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
+
+                    if (match.length !== 0) {
+                        newMatches = {
+                            ...newMatches,
+                            [id]: data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
+                        }
+                    }
+                })
+
+                setMatches(newMatches)
+            })
+            setIsLoaded(true)
+        })
+    }, [page])
 
     return (
         <>
@@ -98,7 +81,7 @@ export default function Teams() {
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
                 {isLoaded && (
                     <>
-                        <PaginationCustom elementsNumber={pagesNumber} page={page} />
+                        <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                         <main className="main container">
                             <div className="teams">
                                 {teams.map(({ acronym, id, image_url, location, name, players }) => (
@@ -106,18 +89,20 @@ export default function Teams() {
                                         key={id}
                                         acronym={acronym}
                                         image_url={image_url}
+                                        location={location}
                                         match={matches[id] !== undefined ? matches[id] : null}
                                         name={name}
-                                        onClick={() => showTeam(location, name, players)}
+                                        players={players}
+                                        showTeam={showTeam}
                                     />
                                 ))}
                             </div>
                         </main>
-                        <PaginationCustom elementsNumber={pagesNumber} page={page} />
+                        <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                     </>
                 )}
             </Style>
-            {team !== null && <TeamInfo changePage={changePage} className="modal" hideTeam={hideTeam} team={team} />}
+            {team !== null && <TeamInfo hideTeam={hideTeam} team={team} />}
         </>
     )
 }

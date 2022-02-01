@@ -32,7 +32,7 @@ export default function App() {
             <NavBar coins={user !== null ? user.coins : null} theme="dark" />
             <Routes>
                 <Route path="/" element={<Home getUser={getUser} user={user} />} />
-                <Route path="/leagues" element={<Leagues />} />
+                <Route path="/leagues/:page" element={<Leagues />} />
                 <Route path="/login" element={<Login getUser={getUser} />} />
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/teams/:page" element={<Teams />} />

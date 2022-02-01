@@ -20,19 +20,22 @@ export default function NavBar({ coins, theme }) {
                         <Link to="/">
                             <Navbar.Brand>Accueil</Navbar.Brand>
                         </Link>
-                        <Nav className="me-auto">
-                            <Link to="/leagues" className="nav-link">
-                                Ligues
-                            </Link>
-                            <Link to="/teams/1" className="nav-link">
-                                Équipes
-                            </Link>
-                            <Link to="/players" className="nav-link">
-                                Joueurs
-                            </Link>
-                        </Nav>
+                        <Navbar.Collapse id="collapse" className="justify-content-end">
+                            <Nav className="me-auto">
+                                <Link to="/leagues/1" className="nav-link">
+                                    Ligues
+                                </Link>
+                                <Link to="/teams/1" className="nav-link">
+                                    Équipes
+                                </Link>
+                                <Link to="/players/1" className="nav-link">
+                                    Joueurs
+                                </Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                        <Navbar.Toggle aria-controls="collapse" />
                         <Nav className="flex-row">
-                            <Navbar.Text>{coins} Jetons</Navbar.Text>
+                            <Navbar.Text className="mx-1">{coins} Jetons</Navbar.Text>
                             <NavDropdown className="mx-1" title={<FontAwesomeIcon icon={['fas', 'cog']} />}>
                                 <NavDropdown.Item>Profil</NavDropdown.Item>
                                 <NavDropdown.Divider />
