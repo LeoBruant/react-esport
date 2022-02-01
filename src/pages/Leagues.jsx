@@ -2,7 +2,7 @@ import League from '../components/League'
 import PaginationCustom from '../components/Pagination'
 import pandascore from '../components/Pandascore'
 import React, { useState } from 'react'
-import { Style } from '../style/Leagues.js'
+import { Style } from '../style/List'
 import { Spinner } from 'react-bootstrap'
 import Redirect from '../components/Redirect'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -48,7 +48,7 @@ export default function Leagues() {
                     <>
                         <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                         <main className="main container">
-                            <div className="leagues">
+                            <div className="elements">
                                 {leagues.map(({ id, image_url, name, url }) => (
                                     <League key={id} image_url={image_url} name={name} url={url} />
                                 ))}

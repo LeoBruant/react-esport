@@ -3,7 +3,7 @@ import pandascore from '../components/Pandascore'
 import React, { useState } from 'react'
 import Redirect from '../components/Redirect'
 import { Spinner } from 'react-bootstrap'
-import { Style } from '../style/Teams.js'
+import { Style } from '../style/List'
 import Team from '../components/Team'
 import TeamInfo from '../components/TeamInfo'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -29,12 +29,8 @@ export default function Teams() {
         setTeam(null)
     }
 
-    const showTeam = (location, name, players) => {
-        setTeam({
-            location,
-            name,
-            players
-        })
+    const showTeam = (id) => {
+        setTeam(teams.filter((team) => team.id === id)[0])
     }
 
     React.useEffect(() => {
@@ -83,10 +79,11 @@ export default function Teams() {
                     <>
                         <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                         <main className="main container">
-                            <div className="teams">
+                            <div className="elements">
                                 {teams.map(({ acronym, id, image_url, location, name, players }) => (
                                     <Team
                                         key={id}
+                                        id={id}
                                         acronym={acronym}
                                         image_url={image_url}
                                         location={location}

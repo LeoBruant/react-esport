@@ -1,11 +1,11 @@
 import live from '../assets/images/live.png'
 import noImage from '../assets/images/no-image.jpg'
 
-export default function Team({ acronym, image_url, location, match, name, players, showTeam }) {
+export default function Team({ acronym, id, image_url, match, name, showTeam }) {
     return (
         <div
-            className="team d-flex flex-column p-4 my-2 mx-auto"
-            onClick={() => showTeam(location, name, players)}
+            className="element d-flex flex-column p-4 my-2 mx-auto"
+            onClick={() => showTeam(id)}
             style={{ height: '250px', width: '250px', border: '2px solid transparent', borderRadius: '0.25rem' }}
         >
             <div className=" d-flex justify-content-center align-items-center">

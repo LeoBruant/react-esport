@@ -16,10 +16,15 @@ export const Style = styled.div`
     }
 
     .main {
-        .leagues {
+        .elements {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+
+            .element:hover {
+                cursor: pointer;
+                border-color: #ddd !important;
+            }
         }
     }
 `

@@ -1,8 +1,9 @@
-import League from '../components/League'
+import Player from '../components/Player'
+import PlayerInfo from '../components/PlayerInfo'
 import PaginationCustom from '../components/Pagination'
 import pandascore from '../components/Pandascore'
 import React, { useState } from 'react'
-import { Style } from '../style/Players.js'
+import { Style } from '../style/List'
 import { Spinner } from 'react-bootstrap'
 import Redirect from '../components/Redirect'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -12,6 +13,7 @@ export default function Players() {
 
     const navigate = useNavigate()
 
+    const [player, setPlayer] = useState(null)
     const [players, setPlayers] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [pagesNumber, setPagesNumber] = useState(0)
@@ -20,6 +22,14 @@ export default function Players() {
         navigate('/players/' + newPage)
         page = newPage
         setIsLoaded(false)
+    }
+
+    const hidePlayer = () => {
+        setPlayer(null)
+    }
+
+    const showPlayer = (id) => {
+        setPlayer(players.filter((player) => player.id === id)[0])
     }
 
     React.useEffect(() => {
@@ -48,9 +58,9 @@ export default function Players() {
                     <>
                         <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                         <main className="main container">
-                            <div className="players">
+                            <div className="elements">
                                 {players.map(({ id, image_url, name }) => (
-                                    <League key={id} image_url={image_url} name={name} />
+                                    <Player key={id} id={id} image_url={image_url} name={name} showPlayer={showPlayer} />
                                 ))}
                             </div>
                         </main>
@@ -58,6 +68,7 @@ export default function Players() {
                     </>
                 )}
             </Style>
+            {player !== null && <PlayerInfo hidePlayer={hidePlayer} player={player} />}
         </>
     )
 }

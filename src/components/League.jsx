@@ -2,7 +2,10 @@ import noImage from '../assets/images/no-image.jpg'
 
 export default function League({ image_url, name, url }) {
     return (
-        <div className="p-4 d-flex flex-column my-2" style={{ height: '250px', width: '250px' }}>
+        <div
+            className="element p-4 d-flex flex-column my-2"
+            style={{ height: '250px', width: '250px', border: '2px solid transparent', borderRadius: '0.25rem' }}
+        >
             <p className="text-center" style={{ fontSize: '1.25rem' }}>
                 {name}
             </p>
