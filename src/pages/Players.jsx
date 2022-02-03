@@ -1,27 +1,27 @@
+import ListHeader from '../components/ListHeader'
+import PaginationCustom from '../components/PaginationCustom'
+import pandascore from '../components/Pandascore'
 import Player from '../components/Player'
 import PlayerInfo from '../components/PlayerInfo'
-import PaginationCustom from '../components/Pagination'
-import pandascore from '../components/Pandascore'
 import React, { useState } from 'react'
 import { Style } from '../style/List'
 import { Spinner } from 'react-bootstrap'
 import Redirect from '../components/Redirect'
 import { useNavigate, useParams } from 'react-router-dom'
 
-export default function Players() {
-    let { page } = useParams()
+export default function Players({ games }) {
+    const { game, page } = useParams()
 
     const navigate = useNavigate()
 
-    const [player, setPlayer] = useState(null)
-    const [players, setPlayers] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [pagesNumber, setPagesNumber] = useState(0)
+    const [player, setPlayer] = useState(null)
+    const [players, setPlayers] = useState([])
 
     const changePage = (newPage) => {
-        navigate('/players/' + newPage)
-        page = newPage
         setIsLoaded(false)
+        navigate('/players/' + game + '/' + newPage)
     }
 
     const hidePlayer = () => {
@@ -36,7 +36,7 @@ export default function Players() {
         let perPage = 25
 
         pandascore
-            .get('lol/players', { params: { per_page: perPage, page } })
+            .get(game + '/players', { params: { per_page: perPage, page } })
             .then((response) => {
                 setPagesNumber(response.headers['x-total'] / perPage)
                 setPlayers(response.data)
@@ -44,15 +44,13 @@ export default function Players() {
             .then(() => {
                 setIsLoaded(true)
             })
-    }, [page])
+    }, [game, page])
 
     return (
         <>
             <Redirect />
             <Style>
-                <header className="header">
-                    <h1 className="title">Joueurs LoL</h1>
-                </header>
+                <ListHeader game={games[game]} games={games} title="Joueurs" />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
                 {isLoaded && (
                     <>

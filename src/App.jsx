@@ -14,6 +14,21 @@ import Registration from './pages/Registration'
 import Teams from './pages/Teams'
 
 export default function App() {
+    const games = {
+        csgo: 'CS:GO',
+        codmw: 'COD MW',
+        dota2: 'Dota 2',
+        fifa: 'Fifa',
+        lol: 'Lol',
+        ow: 'Overwatch',
+        // pubg: 'PUBG',
+        r6siege: 'Rainbow 6 siege',
+        rl: 'Rocket league',
+        valorant: 'Valorant',
+        kog: 'King of glory',
+        'lol-wild-rift': 'Lol wild rift'
+    }
+
     const [user, setUser] = useState(null)
 
     const getUser = () => {
@@ -32,12 +47,12 @@ export default function App() {
         <BrowserRouter>
             <NavBar coins={user !== null ? user.coins : null} theme="dark" />
             <Routes>
-                <Route path="/" element={<Home getUser={getUser} user={user} />} />
-                <Route path="/leagues/:page" element={<Leagues />} />
+                <Route path="/matches/:game" element={<Home games={games} getUser={getUser} user={user} />} />
+                <Route path="/leagues/:game/:page" element={<Leagues games={games} />} />
                 <Route path="/login" element={<Login getUser={getUser} />} />
-                <Route path="/players/:page" element={<Players />} />
+                <Route path="/players/:game/:page" element={<Players games={games} />} />
                 <Route path="/registration" element={<Registration />} />
-                <Route path="/teams/:page" element={<Teams />} />
+                <Route path="/teams/:game/:page" element={<Teams games={games} />} />
                 {user !== null && <Route path="*" element={<NotFound />} />}
             </Routes>
         </BrowserRouter>

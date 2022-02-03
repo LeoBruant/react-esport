@@ -1,18 +1,22 @@
 import axios from 'axios'
 import Bet from '../components/Bet'
+import ListHeader from '../components/ListHeader'
 import Match from '../components/Match'
 import pandascore from '../components/Pandascore'
 import React, { useCallback, useState } from 'react'
 import Redirect from '../components/Redirect'
 import { Spinner } from 'react-bootstrap'
 import { Style } from '../style/Home.js'
+import { useParams } from 'react-router-dom'
 
-export default function Home({ getUser, user }) {
+export default function Home({ games, getUser, user }) {
     const matchTypes = {
         passed: { title: 'passés' },
         running: { title: 'en cours' },
         upcoming: { title: 'à venir' }
     }
+
+    const { game } = useParams()
 
     const [bets, setBets] = useState([])
     const [counter, setCounter] = useState(0)
@@ -33,7 +37,7 @@ export default function Home({ getUser, user }) {
     const getData = useCallback(() => {
         axios
             .all([
-                pandascore.get('lol/matches/past?per_page=100').then(({ data }) => {
+                pandascore.get(game + '/matches/past?per_page=100').then(({ data }) => {
                     setMatches((oldMatches) => {
                         return {
                             ...oldMatches,
@@ -41,7 +45,7 @@ export default function Home({ getUser, user }) {
                         }
                     })
                 }),
-                pandascore.get('lol/matches/running?per_page=100').then(({ data }) => {
+                pandascore.get(game + '/matches/running?per_page=100').then(({ data }) => {
                     setMatches((oldMatches) => {
                         return {
                             ...oldMatches,
@@ -49,7 +53,7 @@ export default function Home({ getUser, user }) {
                         }
                     })
                 }),
-                pandascore.get('lol/matches/upcoming?per_page=100').then(({ data }) => {
+                pandascore.get(game + '/matches/upcoming?per_page=100').then(({ data }) => {
                     setMatches((oldMatches) => {
                         return {
                             ...oldMatches,
@@ -64,7 +68,7 @@ export default function Home({ getUser, user }) {
             .then(() => {
                 setIsLoaded(true)
             })
-    }, [])
+    }, [game])
 
     const hideBet = () => {
         setMatchBet({
@@ -94,16 +98,25 @@ export default function Home({ getUser, user }) {
 
         setTimeout(() => {
             getData()
+            setCounter(counter + 1)
         }, 60000)
     }, [counter, getData])
+
+    React.useEffect(() => {
+        // Update data when game changes
+
+        if (counter !== 0) {
+            setIsLoaded(false)
+            getData()
+            setCounter(counter + 1)
+        }
+    }, [game, getData])
 
     return (
         <>
             <Redirect />
             <Style>
-                <header className="header">
-                    <h1 className="title">Matchs LoL</h1>
-                </header>
+                <ListHeader game={games[game]} games={games} title="Matchs" />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
                 <main className="main container">
                     {isLoaded &&

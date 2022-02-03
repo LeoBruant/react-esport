@@ -1,4 +1,5 @@
-import PaginationCustom from '../components/Pagination'
+import ListHeader from '../components/ListHeader'
+import PaginationCustom from '../components/PaginationCustom'
 import pandascore from '../components/Pandascore'
 import React, { useState } from 'react'
 import Redirect from '../components/Redirect'
@@ -8,8 +9,8 @@ import Team from '../components/Team'
 import TeamInfo from '../components/TeamInfo'
 import { useNavigate, useParams } from 'react-router-dom'
 
-export default function Teams() {
-    let { page } = useParams()
+export default function Teams({ games }) {
+    const { game, page } = useParams()
 
     const navigate = useNavigate()
 
@@ -20,9 +21,8 @@ export default function Teams() {
     const [teams, setTeams] = useState([])
 
     const changePage = (newPage) => {
-        navigate('/teams/' + newPage)
-        page = newPage
         setIsLoaded(false)
+        navigate('/teams/' + game + '/' + newPage)
     }
 
     const hideTeam = () => {
@@ -38,7 +38,7 @@ export default function Teams() {
 
         // Get teams
 
-        pandascore.get('lol/teams', { params: { per_page: perPage, page } }).then((response) => {
+        pandascore.get(game + '/teams', { params: { per_page: perPage, page } }).then((response) => {
             setTeams(response.data)
 
             // Get pages number
@@ -47,7 +47,7 @@ export default function Teams() {
 
             // Get matches
 
-            pandascore.get('lol/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
+            pandascore.get(game + '/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
                 let newMatches = data
 
                 teams.forEach(({ id }) => {
@@ -65,15 +65,13 @@ export default function Teams() {
             })
             setIsLoaded(true)
         })
-    }, [page])
+    }, [game, page])
 
     return (
         <>
             <Redirect />
             <Style>
-                <header className="header">
-                    <h1 className="title">Équipes LoL</h1>
-                </header>
+                <ListHeader game={games[game]} games={games} title="Équipes" />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
                 {isLoaded && (
                     <>

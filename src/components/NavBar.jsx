@@ -1,7 +1,6 @@
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function NavBar({ coins, theme }) {
     const navigate = useNavigate()
@@ -17,18 +16,18 @@ export default function NavBar({ coins, theme }) {
             {coins !== null && (
                 <Navbar bg={theme} expand="lg" variant={theme}>
                     <Container>
-                        <Link to="/">
+                        <Link to={'/matches/' + window.location.href.split('/')[4]}>
                             <Navbar.Brand>Accueil</Navbar.Brand>
                         </Link>
                         <Navbar.Collapse id="collapse" className="justify-content-end">
                             <Nav className="me-auto">
-                                <Link to="/leagues/1" className="nav-link">
+                                <Link to={'/leagues/' + window.location.href.split('/')[4] + '/1'} className="nav-link">
                                     Ligues
                                 </Link>
-                                <Link to="/teams/1" className="nav-link">
+                                <Link to={'/teams/' + window.location.href.split('/')[4] + '/1'} className="nav-link">
                                     Équipes
                                 </Link>
-                                <Link to="/players/1" className="nav-link">
+                                <Link to={'/players/' + window.location.href.split('/')[4] + '/1'} className="nav-link">
                                     Joueurs
                                 </Link>
                             </Nav>

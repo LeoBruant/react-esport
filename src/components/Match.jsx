@@ -124,7 +124,11 @@ export default function Match({
                     <img
                         alt={opponents[0] !== undefined ? opponents[0].opponent.name + ' image' : 'no image'}
                         className="mt-3"
-                        src={opponents[0] !== undefined ? opponents[0].opponent.image_url : noImage}
+                        src={
+                            opponents[0] !== undefined && opponents[0].opponent.image_url !== null
+                                ? opponents[0].opponent.image_url
+                                : noImage
+                        }
                         style={{ width: '100px', height: '100px' }}
                     ></img>
                 </div>
@@ -163,7 +167,11 @@ export default function Match({
                     <img
                         alt={opponents[1] !== undefined ? opponents[1].opponent.name + ' image' : 'no image'}
                         className="mt-3"
-                        src={opponents[1] !== undefined ? opponents[1].opponent.image_url : noImage}
+                        src={
+                            opponents[1] !== undefined && opponents[1].opponent.image_url !== null
+                                ? opponents[1].opponent.image_url
+                                : noImage
+                        }
                         style={{ width: '100px', height: '100px' }}
                     ></img>
                 </div>
