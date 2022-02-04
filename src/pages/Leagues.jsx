@@ -9,6 +9,8 @@ import Redirect from '../components/Redirect'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function Leagues({ games }) {
+    const perPage = 25
+
     const { game, page } = useParams()
 
     const navigate = useNavigate()
@@ -23,17 +25,23 @@ export default function Leagues({ games }) {
     }
 
     React.useEffect(() => {
-        let perPage = 25
-
-        pandascore
-            .get(game + '/leagues', { params: { per_page: perPage, page } })
-            .then((response) => {
-                setPagesNumber(response.headers['x-total'] / perPage)
-                setLeagues(response.data)
-            })
-            .then(() => {
-                setIsLoaded(true)
-            })
+        if (isNaN(page)) {
+            navigate('/leagues/' + game + '/1')
+        } else {
+            pandascore
+                .get(game + '/leagues', { params: { per_page: perPage, page } })
+                .then((response) => {
+                    if (response.data.length === 0) {
+                        navigate('/leagues/' + game + '/1')
+                    } else {
+                        setPagesNumber(response.headers['x-total'] / perPage)
+                        setLeagues(response.data)
+                    }
+                })
+                .then(() => {
+                    setIsLoaded(true)
+                })
+        }
     }, [game, page])
 
     return (

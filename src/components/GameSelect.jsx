@@ -1,8 +1,24 @@
 import { Form } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import React from 'react'
 
 export default function GameSelect({ games }) {
+    const { game } = useParams()
     const navigate = useNavigate()
+
+    React.useEffect(() => {
+        let gameKeys = Object.keys(games)
+
+        if (!gameKeys.includes(game)) {
+            navigate(
+                '/' +
+                    window.location.href.split('/')[3] +
+                    '/' +
+                    gameKeys[0] +
+                    (window.location.href.split('/')[3] !== 'matches' ? '/1' : '')
+            )
+        }
+    }, [])
 
     return (
         <Form className="col-6 col-sm-4 col-md-3 col-xl-2 mt-2">

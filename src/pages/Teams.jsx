@@ -10,6 +10,8 @@ import TeamInfo from '../components/TeamInfo'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function Teams({ games }) {
+    const perPage = 25
+
     const { game, page } = useParams()
 
     const navigate = useNavigate()
@@ -34,37 +36,43 @@ export default function Teams({ games }) {
     }
 
     React.useEffect(() => {
-        let perPage = 25
+        if (isNaN(page)) {
+            navigate('/teams/' + game + '/1')
+        } else {
+            // Get teams
 
-        // Get teams
+            pandascore.get(game + '/teams', { params: { per_page: perPage, page } }).then((response) => {
+                if (response.data.length === 0) {
+                    navigate('/teams/' + game + '/1')
+                } else {
+                    setTeams(response.data)
 
-        pandascore.get(game + '/teams', { params: { per_page: perPage, page } }).then((response) => {
-            setTeams(response.data)
+                    // Get pages number
 
-            // Get pages number
+                    setPagesNumber(response.headers['x-total'] / perPage)
 
-            setPagesNumber(response.headers['x-total'] / perPage)
+                    // Get matches
 
-            // Get matches
+                    pandascore.get(game + '/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
+                        let newMatches = data
 
-            pandascore.get(game + '/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
-                let newMatches = data
+                        teams.forEach(({ id }) => {
+                            let match = data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
 
-                teams.forEach(({ id }) => {
-                    let match = data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
+                            if (match.length !== 0) {
+                                newMatches = {
+                                    ...newMatches,
+                                    [id]: data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
+                                }
+                            }
+                        })
 
-                    if (match.length !== 0) {
-                        newMatches = {
-                            ...newMatches,
-                            [id]: data.filter(({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id)
-                        }
-                    }
-                })
-
-                setMatches(newMatches)
+                        setMatches(newMatches)
+                    })
+                    setIsLoaded(true)
+                }
             })
-            setIsLoaded(true)
-        })
+        }
     }, [game, page])
 
     return (
