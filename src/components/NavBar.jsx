@@ -17,7 +17,9 @@ export default function NavBar({ coins, theme }) {
                 <Navbar bg={theme} expand="lg" variant={theme}>
                     <Container>
                         <Link to={'/matches/' + window.location.href.split('/')[4]}>
-                            <Navbar.Brand>Matchs</Navbar.Brand>
+                            <Navbar.Brand>
+                                <FontAwesomeIcon icon={['fab', 'react']} /> Matchs
+                            </Navbar.Brand>
                         </Link>
                         <Navbar.Collapse id="collapse" className="justify-content-end">
                             <Nav className="me-auto">
