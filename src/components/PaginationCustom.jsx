@@ -25,12 +25,12 @@ export default function PaginationCustom({ changePage, elementsNumber, page }) {
             {parseInt(page) < elementsNumber && <Pagination.Ellipsis />}
 
             <Pagination.Next
-                disabled={parseInt(page) === Math.ceil(elementsNumber)}
+                disabled={parseInt(page) === elementsNumber}
                 onClick={() => (parseInt(page) < elementsNumber ? changePage(parseInt(page) + 1) : '')}
             />
             <Pagination.Last
-                disabled={parseInt(page) === Math.ceil(elementsNumber)}
-                onClick={() => (parseInt(page) !== Math.ceil(elementsNumber) ? changePage(Math.ceil(elementsNumber)) : '')}
+                disabled={parseInt(page) === elementsNumber}
+                onClick={() => (parseInt(page) !== elementsNumber ? changePage(elementsNumber) : '')}
             />
         </Pagination>
     )

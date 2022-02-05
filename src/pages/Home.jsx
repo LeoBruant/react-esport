@@ -7,7 +7,7 @@ import React, { useCallback, useState } from 'react'
 import Redirect from '../components/Redirect'
 import { Spinner } from 'react-bootstrap'
 import { Style } from '../style/Home.js'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 export default function Home({ games, getUser, user }) {
     const matchTypes = {
@@ -17,6 +17,7 @@ export default function Home({ games, getUser, user }) {
     }
 
     const { game } = useParams()
+    const [params] = useSearchParams()
 
     const [bets, setBets] = useState([])
     const [counter, setCounter] = useState(0)
@@ -35,32 +36,52 @@ export default function Home({ games, getUser, user }) {
     }
 
     const getData = useCallback(() => {
+        let searchParam = params.get('search') !== null ? '?search[name]=' + params.get('search') : ''
+
         axios
             .all([
-                pandascore.get(game + '/matches/past?per_page=100').then(({ data }) => {
-                    setMatches((oldMatches) => {
-                        return {
-                            ...oldMatches,
-                            passed: data
+                pandascore
+                    .get(game + '/matches/past' + searchParam, {
+                        params: {
+                            perPage: 100
                         }
                     })
-                }),
-                pandascore.get(game + '/matches/running?per_page=100').then(({ data }) => {
-                    setMatches((oldMatches) => {
-                        return {
-                            ...oldMatches,
-                            running: data
+                    .then(({ data }) => {
+                        setMatches((oldMatches) => {
+                            return {
+                                ...oldMatches,
+                                passed: data
+                            }
+                        })
+                    }),
+                pandascore
+                    .get(game + '/matches/running' + searchParam, {
+                        params: {
+                            perPage: 100
                         }
                     })
-                }),
-                pandascore.get(game + '/matches/upcoming?per_page=100').then(({ data }) => {
-                    setMatches((oldMatches) => {
-                        return {
-                            ...oldMatches,
-                            upcoming: data
+                    .then(({ data }) => {
+                        setMatches((oldMatches) => {
+                            return {
+                                ...oldMatches,
+                                running: data
+                            }
+                        })
+                    }),
+                pandascore
+                    .get(game + '/matches/upcoming' + searchParam, {
+                        params: {
+                            perPage: 100
                         }
                     })
-                }),
+                    .then(({ data }) => {
+                        setMatches((oldMatches) => {
+                            return {
+                                ...oldMatches,
+                                upcoming: data
+                            }
+                        })
+                    }),
                 axios.get('http://localhost:3004/bets').then(({ data }) => {
                     setBets(data)
                 })
@@ -68,7 +89,7 @@ export default function Home({ games, getUser, user }) {
             .then(() => {
                 setIsLoaded(true)
             })
-    }, [game])
+    }, [game, params])
 
     const hideBet = () => {
         setMatchBet({

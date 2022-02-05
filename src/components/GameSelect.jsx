@@ -18,10 +18,10 @@ export default function GameSelect({ games }) {
                     (window.location.href.split('/')[3] !== 'matches' ? '/1' : '')
             )
         }
-    }, [])
+    }, [game, games, navigate])
 
     return (
-        <Form className="col-6 col-sm-4 col-md-3 col-xl-2 mt-2">
+        <Form className="col-6 col-sm-4 col-md-3 col-xl-2">
             <Form.Select
                 onChange={(e) =>
                     navigate(

@@ -6,17 +6,13 @@ import ReactDOM from 'react-dom'
 
 import './app.scss'
 
-// Bootstrap
-
-import 'bootstrap/dist/css/bootstrap.min.css'
-
 // Font awesome
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCog } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faReact } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCog, faReact)
+library.add(faCog, faReact, faSearch)
 
 // Render
 

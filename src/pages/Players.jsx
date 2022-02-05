@@ -7,14 +7,15 @@ import React, { useState } from 'react'
 import { Style } from '../style/List'
 import { Spinner } from 'react-bootstrap'
 import Redirect from '../components/Redirect'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function Players({ games }) {
     const perPage = 25
 
-    const { game, page } = useParams()
-
     const navigate = useNavigate()
+
+    const { game, page } = useParams()
+    const [params] = useSearchParams()
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [pagesNumber, setPagesNumber] = useState(0)
@@ -23,7 +24,7 @@ export default function Players({ games }) {
 
     const changePage = (newPage) => {
         setIsLoaded(false)
-        navigate('/players/' + game + '/' + newPage)
+        navigate('/players/' + game + '/' + newPage + (params.get('search') !== null ? '?search=' + params.get('search') : ''))
     }
 
     const hidePlayer = () => {
@@ -39,12 +40,15 @@ export default function Players({ games }) {
             navigate('/players/' + game + '/1')
         } else {
             pandascore
-                .get(game + '/players', { params: { per_page: perPage, page } })
+                .get(game + '/players' + (params.get('search') !== null ? '?search[name]=' + params.get('search') : ''), {
+                    params: { per_page: perPage, page }
+                })
                 .then((response) => {
-                    if (response.data.length === 0) {
+                    setPagesNumber(Math.ceil(response.headers['x-total'] / perPage))
+
+                    if (parseInt(page) < 1) {
                         navigate('/players/' + game + '/1')
                     } else {
-                        setPagesNumber(response.headers['x-total'] / perPage)
                         setPlayers(response.data)
                     }
                 })
@@ -52,7 +56,7 @@ export default function Players({ games }) {
                     setIsLoaded(true)
                 })
         }
-    }, [game, page])
+    }, [game, navigate, page, pagesNumber, params])
 
     return (
         <>

@@ -7,14 +7,15 @@ import { Spinner } from 'react-bootstrap'
 import { Style } from '../style/List'
 import Team from '../components/Team'
 import TeamInfo from '../components/TeamInfo'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function Teams({ games }) {
     const perPage = 25
 
-    const { game, page } = useParams()
-
     const navigate = useNavigate()
+
+    const { game, page } = useParams()
+    const [params] = useSearchParams()
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [matches, setMatches] = useState({})
@@ -24,7 +25,7 @@ export default function Teams({ games }) {
 
     const changePage = (newPage) => {
         setIsLoaded(false)
-        navigate('/teams/' + game + '/' + newPage)
+        navigate('/teams/' + game + '/' + newPage + (params.get('search') !== null ? '?search=' + params.get('search') : ''))
     }
 
     const hideTeam = () => {
@@ -41,16 +42,22 @@ export default function Teams({ games }) {
         } else {
             // Get teams
 
-            pandascore.get(game + '/teams', { params: { per_page: perPage, page } }).then((response) => {
-                if (response.data.length === 0) {
-                    navigate('/teams/' + game + '/1')
-                } else {
-                    setTeams(response.data)
-
+            pandascore
+                .get(game + '/teams' + (params.get('search') !== null ? '?search[name]=' + params.get('search') : ''), {
+                    params: { per_page: perPage, page }
+                })
+                .then((response) => {
                     // Get pages number
 
-                    setPagesNumber(response.headers['x-total'] / perPage)
+                    setPagesNumber(Math.ceil(response.headers['x-total'] / perPage))
 
+                    if (parseInt(page) < 1) {
+                        navigate('/teams/' + game + '/1')
+                    } else {
+                        setTeams(response.data)
+                    }
+                })
+                .finally(() => {
                     // Get matches
 
                     pandascore.get(game + '/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
@@ -70,10 +77,9 @@ export default function Teams({ games }) {
                         setMatches(newMatches)
                     })
                     setIsLoaded(true)
-                }
-            })
+                })
         }
-    }, [game, page])
+    }, [game, navigate, page, pagesNumber, params])
 
     return (
         <>

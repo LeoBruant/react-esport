@@ -129,7 +129,8 @@ export default function Match({
                                 ? opponents[0].opponent.image_url
                                 : noImage
                         }
-                        style={{ width: '100px', height: '100px' }}
+                        style={{ width: '100px', maxHeight: '100px' }}
+                        title={opponents[0] !== undefined ? opponents[0].opponent.name : ''}
                     ></img>
                 </div>
                 {matchType[0] === 'upcoming' && (
@@ -173,6 +174,7 @@ export default function Match({
                                 : noImage
                         }
                         style={{ width: '100px', height: '100px' }}
+                        title={opponents[1] !== undefined ? opponents[1].opponent.name : ''}
                     ></img>
                 </div>
             </div>

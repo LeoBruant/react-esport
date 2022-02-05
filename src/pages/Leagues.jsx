@@ -6,14 +6,15 @@ import React, { useState } from 'react'
 import { Style } from '../style/List'
 import { Spinner } from 'react-bootstrap'
 import Redirect from '../components/Redirect'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function Leagues({ games }) {
     const perPage = 25
 
-    const { game, page } = useParams()
-
     const navigate = useNavigate()
+
+    const { game, page } = useParams()
+    const [params] = useSearchParams()
 
     const [isLoaded, setIsLoaded] = useState(false)
     const [leagues, setLeagues] = useState([])
@@ -21,7 +22,7 @@ export default function Leagues({ games }) {
 
     const changePage = (newPage) => {
         setIsLoaded(false)
-        navigate('/leagues/' + game + '/' + newPage)
+        navigate('/leagues/' + game + '/' + newPage + (params.get('search') !== null ? '?search=' + params.get('search') : ''))
     }
 
     React.useEffect(() => {
@@ -29,12 +30,15 @@ export default function Leagues({ games }) {
             navigate('/leagues/' + game + '/1')
         } else {
             pandascore
-                .get(game + '/leagues', { params: { per_page: perPage, page } })
+                .get(game + '/leagues/' + (params.get('search') !== null ? '?search[name]=' + params.get('search') : ''), {
+                    params: { per_page: perPage, page }
+                })
                 .then((response) => {
-                    if (response.data.length === 0) {
+                    setPagesNumber(Math.ceil(response.headers['x-total'] / perPage))
+
+                    if (parseInt(page) < 1) {
                         navigate('/leagues/' + game + '/1')
                     } else {
-                        setPagesNumber(response.headers['x-total'] / perPage)
                         setLeagues(response.data)
                     }
                 })
@@ -42,13 +46,13 @@ export default function Leagues({ games }) {
                     setIsLoaded(true)
                 })
         }
-    }, [game, page])
+    }, [changePage, game, navigate, page, pagesNumber, params])
 
     return (
         <>
             <Redirect />
             <Style>
-                <ListHeader game={games[game]} games={games} title="Ligues" />
+                <ListHeader changePage={changePage} game={games[game]} games={games} title="Ligues" />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
                 {isLoaded && (
                     <>
