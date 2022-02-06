@@ -115,7 +115,7 @@ export default function Match({
     return (
         <div className="p-4 match" style={getMatchBorder()}>
             <div className="text-center pb-3">
-                <p className="m-0 text-capitalize">début : {moment(begin_at).format('DD/MM/YYYY HH:mm:ss')}</p>
+                <p className="m-0 text-capitalize">début : {begin_at !== null ? moment(begin_at).format('DD/MM/YYYY HH:mm:ss') : '-'}</p>
                 <p className="m-0 text-capitalize">fin : {end_at !== null ? moment(end_at).format('DD/MM/YYYY HH:mm:ss') : '-'}</p>
             </div>
             <div className="d-flex justify-content-between align-items-center">

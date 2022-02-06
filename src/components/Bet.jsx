@@ -2,8 +2,11 @@ import axios from 'axios'
 import { Button, Form, Modal } from 'react-bootstrap'
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
+    const navigate = useNavigate()
+
     const [errorMessages, setErrorMessages] = useState({
         coins: '',
         winner: ''
@@ -56,8 +59,6 @@ export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
             }
         })
 
-        // Check if all fields are filled
-
         if (filled) {
             let bet = {
                 coins: parseInt(form.coins),
@@ -90,37 +91,45 @@ export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
 
             // Create bet
             else {
-                axios
-                    .all([
-                        // Update coins
-
+                axios.get('http://localhost:3004/users?id=' + localStorage.id + '&loginToken=' + localStorage.token).then(({ data }) => {
+                    if (data.length === 0) {
+                        localStorage.removeItem('id')
+                        localStorage.removeItem('token')
+                        navigate('/login')
+                    } else {
                         axios
-                            .patch('http://localhost:3004/users/' + localStorage.id, {
-                                coins: user.coins - bet.coins
-                            })
+                            .all([
+                                // Update coins
+
+                                axios
+                                    .patch('http://localhost:3004/users/' + localStorage.id, {
+                                        coins: user.coins - bet.coins
+                                    })
+                                    .then(() => {
+                                        getUser()
+                                    }),
+
+                                // Update bets
+
+                                axios.post('http://localhost:3004/bets', bet).then(() => {
+                                    getBets()
+                                })
+                            ])
+
+                            // Show confirmation
+
                             .then(() => {
-                                getUser()
-                            }),
+                                hideBet()
 
-                        // Update bets
-
-                        axios.post('http://localhost:3004/bets', bet).then(() => {
-                            getBets()
-                        })
-                    ])
-
-                    // Show confirmation
-
-                    .then(() => {
-                        hideBet()
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Votre pari a bien été effectué',
-                            confirmButtonColor: '#157347',
-                            timer: 1000
-                        })
-                    })
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Votre pari a bien été effectué',
+                                    confirmButtonColor: '#157347',
+                                    timer: 1000
+                                })
+                            })
+                    }
+                })
             }
         }
     }

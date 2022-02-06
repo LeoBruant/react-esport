@@ -4,7 +4,6 @@ import ListHeader from '../components/ListHeader'
 import Match from '../components/Match'
 import pandascore from '../components/Pandascore'
 import React, { useCallback, useState } from 'react'
-import Redirect from '../components/Redirect'
 import { Spinner } from 'react-bootstrap'
 import { Style } from '../style/Home.js'
 import { useParams, useSearchParams } from 'react-router-dom'
@@ -135,7 +134,7 @@ export default function Home({ games, getUser, user }) {
 
     return (
         <>
-            <Redirect />
+            <title>Paris e-sportifs | Matchs</title>
             <Style>
                 <ListHeader game={games[game]} games={games} title="Matchs" />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
