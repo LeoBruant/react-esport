@@ -1,5 +1,5 @@
 import axios from 'axios'
-import CheckUser from './CheckUser'
+import CheckUser from '../js/CheckUser'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import noImage from '../assets/images/no-image.jpg'
 import Swal from 'sweetalert2'

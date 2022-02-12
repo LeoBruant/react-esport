@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Button, Form, Modal } from 'react-bootstrap'
-import CheckUser from './CheckUser'
+import CheckUser from '../js/CheckUser'
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
