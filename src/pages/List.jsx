@@ -1,4 +1,5 @@
-import ListHeader from '../components/ListHeader'
+import axios from 'axios'
+import Header from '../components/Header'
 import League from '../components/League'
 import PaginationCustom from '../components/PaginationCustom'
 import pandascore from '../components/Pandascore'
@@ -100,7 +101,7 @@ export default function List({ games, pageName }) {
         <>
             <title>Paris e-sportifs | {pageNames[pageName]}</title>
             <Style>
-                <ListHeader game={games[game]} games={games} title={pageNames[pageName]} />
+                <Header game={games[game]} games={games} title={pageNames[pageName]} />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
                 {isLoaded && (
                     <>

@@ -58,7 +58,9 @@ export default function Registration() {
 
         Object.entries(form).forEach((entry) => {
             if (entry[1] === '') {
-                filled = false
+                if (filled) {
+                    filled = false
+                }
 
                 setErrorMessages((oldErrorMessages) => {
                     return {
@@ -133,6 +135,7 @@ export default function Registration() {
 
     return (
         <Style>
+            <title>Paris e-sportifs | Inscription</title>
             <header className="header">
                 <h1>Inscription</h1>
             </header>

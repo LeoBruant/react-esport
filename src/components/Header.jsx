@@ -1,7 +1,7 @@
 import GameSelect from './GameSelect'
 import Search from './Search'
 
-export default function ListHeader({ game, games, title }) {
+export default function Header({ game, games, title }) {
     return (
         <header className="header container pt-2">
             <div className="d-flex justify-content-between">

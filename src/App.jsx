@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import React, { useState } from 'react'
 
-import Home from './pages/Home'
+import Matches from './pages/Matches'
 import List from './pages/List'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
@@ -46,7 +46,7 @@ export default function App() {
             <NavBar coins={user !== null ? user.coins : null} theme="dark" />
             <Routes>
                 <Route exact path="/" element={<Redirect basePath={true} game={Object.keys(games)[0]} />} />
-                <Route path="/matches/:game" element={<Home games={games} getUser={getUser} user={user} />} />
+                <Route path="/matches/:game" element={<Matches games={games} getUser={getUser} user={user} />} />
                 <Route path="/leagues/:game/:page" element={<List games={games} pageName="leagues" />} />
                 <Route exact path="/login" element={<Login getUser={getUser} />} />
                 <Route path="/players/:game/:page" element={<List games={games} pageName="players" />} />

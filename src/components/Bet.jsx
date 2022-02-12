@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Button, Form, Modal } from 'react-bootstrap'
+import CheckUser from './CheckUser'
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +17,72 @@ export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
         coins: '',
         winner: ''
     })
+
+    const create = () => {
+        let bet = {
+            coins: parseInt(form.coins),
+            ended: false,
+            matchId: matchBet.id,
+            userId: parseInt(localStorage.id),
+            winner: parseInt(form.winner)
+        }
+
+        // Check if coins are less than 1
+
+        if (bet.coins < 1) {
+            setErrorMessages((oldErrorMessages) => {
+                return {
+                    ...oldErrorMessages,
+                    coins: 'Vous devez miser un moins 1 jeton'
+                }
+            })
+        }
+
+        // Check if coins are more than the user has
+        else if (bet.coins > user.coins) {
+            setErrorMessages((oldErrorMessages) => {
+                return {
+                    ...oldErrorMessages,
+                    coins: "Vous n'avez pas assez de jetons"
+                }
+            })
+        }
+
+        // Create bet
+        else {
+            axios
+                .all([
+                    // Update coins
+
+                    axios
+                        .patch('http://localhost:3004/users/' + localStorage.id, {
+                            coins: user.coins - bet.coins
+                        })
+                        .then(() => {
+                            getUser()
+                        }),
+
+                    // Update bets
+
+                    axios.post('http://localhost:3004/bets', bet).then(() => {
+                        getBets()
+                    })
+                ])
+
+                // Show confirmation
+
+                .then(() => {
+                    hideBet()
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Votre pari a bien été effectué',
+                        confirmButtonColor: '#157347',
+                        timer: 1000
+                    })
+                })
+        }
+    }
 
     const handleInput = (field, value) => {
         // Remove error message
@@ -48,7 +115,9 @@ export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
 
         Object.entries(form).forEach((entry) => {
             if (entry[1] === '') {
-                filled = false
+                if (filled) {
+                    filled = false
+                }
 
                 setErrorMessages((oldErrorMessages) => {
                     return {
@@ -60,77 +129,7 @@ export default function Bet({ getBets, getUser, hideBet, matchBet, user }) {
         })
 
         if (filled) {
-            let bet = {
-                coins: parseInt(form.coins),
-                ended: false,
-                matchId: matchBet.id,
-                userId: parseInt(localStorage.id),
-                winner: parseInt(form.winner)
-            }
-
-            // Check if coins are less than 1
-
-            if (bet.coins < 1) {
-                setErrorMessages((oldErrorMessages) => {
-                    return {
-                        ...oldErrorMessages,
-                        coins: 'Vous devez miser un moins 1 jeton'
-                    }
-                })
-            }
-
-            // Check if coins are more than the user has
-            else if (bet.coins > user.coins) {
-                setErrorMessages((oldErrorMessages) => {
-                    return {
-                        ...oldErrorMessages,
-                        coins: "Vous n'avez pas assez de jetons"
-                    }
-                })
-            }
-
-            // Create bet
-            else {
-                axios.get('http://localhost:3004/users?id=' + localStorage.id + '&loginToken=' + localStorage.token).then(({ data }) => {
-                    if (data.length === 0) {
-                        localStorage.removeItem('id')
-                        localStorage.removeItem('token')
-                        navigate('/login')
-                    } else {
-                        axios
-                            .all([
-                                // Update coins
-
-                                axios
-                                    .patch('http://localhost:3004/users/' + localStorage.id, {
-                                        coins: user.coins - bet.coins
-                                    })
-                                    .then(() => {
-                                        getUser()
-                                    }),
-
-                                // Update bets
-
-                                axios.post('http://localhost:3004/bets', bet).then(() => {
-                                    getBets()
-                                })
-                            ])
-
-                            // Show confirmation
-
-                            .then(() => {
-                                hideBet()
-
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Votre pari a bien été effectué',
-                                    confirmButtonColor: '#157347',
-                                    timer: 1000
-                                })
-                            })
-                    }
-                })
-            }
+            CheckUser(navigate, create)
         }
     }
 

@@ -47,7 +47,9 @@ export default function Login({ getUser }) {
 
         Object.entries(form).forEach((entry) => {
             if (entry[1] === '') {
-                filled = false
+                if (filled) {
+                    filled = false
+                }
 
                 setErrorMessages((oldErrorMessages) => {
                     return {
@@ -95,6 +97,7 @@ export default function Login({ getUser }) {
 
     return (
         <Style>
+            <title>Paris e-sportifs | Connexion</title>
             <header className="header">
                 <h1>Connexion</h1>
             </header>
@@ -125,7 +128,7 @@ export default function Login({ getUser }) {
                     </Button>
                 </Form>
                 <p className="registration">
-                    Pas de compte ? Inscrivez-vous <Link to="/Registration">Ici</Link>
+                    Pas de compte ? Inscrivez-vous <Link to="/registration">Ici</Link>
                 </p>
             </Container>
         </Style>
