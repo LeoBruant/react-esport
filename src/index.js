@@ -9,10 +9,11 @@ import './app.scss'
 // Font awesome
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCog, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faSearch, faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons'
 import { faReact } from '@fortawesome/free-brands-svg-icons'
+import { faStar as faStarEmpty } from '@fortawesome/free-regular-svg-icons'
 
-library.add(faCog, faReact, faSearch)
+library.add(faCog, faReact, faSearch, faStarEmpty, faStarSolid)
 
 // Render
 

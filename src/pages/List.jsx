@@ -25,6 +25,7 @@ export default function List({ games, pageName }) {
     const { game, page } = useParams()
     const [params] = useSearchParams()
 
+    const [favourites, setFavourites] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
     const [matches, setMatches] = useState({})
     const [pagesNumber, setPagesNumber] = useState(0)
@@ -34,6 +35,12 @@ export default function List({ games, pageName }) {
     const changePage = (newPage) => {
         setIsLoaded(false)
         navigate('/' + pageName + '/' + game + '/' + newPage + (params.get('search') !== null ? '?search=' + params.get('search') : ''))
+    }
+
+    const getFavourites = () => {
+        axios.get('http://localhost:3004/favourites?userId=' + localStorage.id).then(({ data }) => {
+            setFavourites(data)
+        })
     }
 
     const hideElement = () => {
@@ -63,6 +70,11 @@ export default function List({ games, pageName }) {
                         navigate('/' + pageName + '/' + game + '/1')
                     } else {
                         setElements(response.data)
+                    }
+                })
+                .then(() => {
+                    if (pageName === 'leagues') {
+                        getFavourites()
                     }
                 })
                 .then(() => {
@@ -110,7 +122,19 @@ export default function List({ games, pageName }) {
                             <div className="elements">
                                 {pageName === 'leagues' &&
                                     elements.map(({ id, image_url, name, url }) => (
-                                        <League key={id} image_url={image_url} name={name} url={url} />
+                                        <League
+                                            getFavourites={getFavourites}
+                                            key={id}
+                                            id={id}
+                                            image_url={image_url}
+                                            name={name}
+                                            url={url}
+                                            favourite={
+                                                favourites.filter(({ leagueId }) => leagueId === id).length !== 0
+                                                    ? favourites.filter(({ leagueId }) => leagueId === id)[0]
+                                                    : null
+                                            }
+                                        />
                                     ))}
                                 {pageName === 'players' &&
                                     elements.map(({ id, image_url, name }) => (

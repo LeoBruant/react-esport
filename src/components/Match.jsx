@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 export default function Match({
     bet,
     bets,
+    favourite = false,
     getBets,
     getUser,
     match: { begin_at, end_at, id, name, opponents, results, official_stream_url, winner },
@@ -104,7 +105,11 @@ export default function Match({
         } else if (betStatus === false) {
             return { border: '2px solid #d00' }
         } else {
-            return { borderBottom: '2px solid #ddd' }
+            if (favourite) {
+                return { border: '2px solid #0b5ed7' }
+            } else {
+                return { borderBottom: '2px solid #ddd' }
+            }
         }
     }
 
@@ -173,7 +178,7 @@ export default function Match({
                                 ? opponents[1].opponent.image_url
                                 : noImage
                         }
-                        style={{ width: '100px', height: '100px' }}
+                        style={{ width: '100px', maxHeight: '100px' }}
                         title={opponents[1] !== undefined ? opponents[1].opponent.name : ''}
                     ></img>
                 </div>
