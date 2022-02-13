@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Character from '../components/Character'
 import Header from '../components/Header'
 import League from '../components/League'
 import PaginationCustom from '../components/PaginationCustom'
@@ -12,11 +13,13 @@ import Team from '../components/Team'
 import TeamInfo from '../components/TeamInfo'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
-export default function List({ games, pageName }) {
+export default function List({ games, mobas = null, pageName }) {
     const pageNames = {
         leagues: 'Ligues',
         players: 'Joueurs',
-        teams: 'Équipes'
+        teams: 'Équipes',
+        champions: 'Champions',
+        heroes: 'Héros'
     }
     const perPage = 25
 
@@ -54,12 +57,29 @@ export default function List({ games, pageName }) {
     React.useEffect(() => {
         if (isNaN(page)) {
             navigate('/' + pageName + '/' + game + '/1')
+        } else if (pageName === 'characters' && !mobas.includes(game)) {
+            navigate('/matches/' + game)
         } else {
+            let characters = ''
+
+            if (pageName === 'characters') {
+                if (game === 'dota2') {
+                    characters = 'heroes'
+                } else if (game === 'lol') {
+                    characters = 'champions'
+                }
+            }
+
             // Get elements
 
             pandascore
-                .get(game + '/' + pageName + '/' + (params.get('search') !== null ? '?search[name]=' + params.get('search') : ''), {
-                    params: { per_page: perPage, page }
+                .get(game + '/' + (characters !== '' ? characters : pageName) + '/', {
+                    params: {
+                        per_page: perPage,
+                        page,
+                        'search[name]': params.get('search') !== null ? params.get('search') : '',
+                        sort: 'name'
+                    }
                 })
                 .then((response) => {
                     // Get pages number
@@ -120,6 +140,17 @@ export default function List({ games, pageName }) {
                         <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                         <main className="main container">
                             <div className="elements">
+                                {pageName === 'characters' &&
+                                    elements.map(({ id, image_url, localized_name, name }) => (
+                                        <Character
+                                            key={id}
+                                            id={id}
+                                            image_url={image_url}
+                                            localized_name={localized_name}
+                                            name={name}
+                                            showCharacter={showElement}
+                                        />
+                                    ))}
                                 {pageName === 'leagues' &&
                                     elements.map(({ id, image_url, name, url }) => (
                                         <League
@@ -160,8 +191,12 @@ export default function List({ games, pageName }) {
                     </>
                 )}
             </Style>
-            {element !== null && pageName === 'teams' && <TeamInfo hideTeam={hideElement} team={element} />}
-            {element !== null && pageName === 'players' && <PlayerInfo hidePlayer={hideElement} player={element} />}
+            {element !== null && (
+                <>
+                    {pageName === 'teams' && <TeamInfo hideTeam={hideElement} team={element} />}
+                    {pageName === 'players' && <PlayerInfo hidePlayer={hideElement} player={element} />}
+                </>
+            )}
         </>
     )
 }

@@ -29,7 +29,7 @@ export default function PaginationCustom({ changePage, elementsNumber, page }) {
                 onClick={() => (parseInt(page) < elementsNumber ? changePage(parseInt(page) + 1) : '')}
             />
             <Pagination.Last
-                disabled={parseInt(page) === elementsNumber}
+                disabled={parseInt(page) >= elementsNumber}
                 onClick={() => (parseInt(page) !== elementsNumber ? changePage(elementsNumber) : '')}
             />
         </Pagination>

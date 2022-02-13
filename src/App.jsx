@@ -26,6 +26,8 @@ export default function App() {
         'lol-wild-rift': 'Lol wild rift'
     }
 
+    const mobas = ['dota2', 'lol']
+
     const [user, setUser] = useState(null)
 
     const getUser = () => {
@@ -43,15 +45,18 @@ export default function App() {
     return (
         <BrowserRouter>
             <Redirect />
-            <NavBar coins={user !== null ? user.coins : null} theme="dark" />
+            <NavBar coins={user !== null ? user.coins : null} mobas={mobas} theme="dark" />
             <Routes>
                 <Route exact path="/" element={<Redirect basePath={true} game={Object.keys(games)[0]} />} />
-                <Route path="/matches/:game" element={<Matches games={games} getUser={getUser} user={user} />} />
+
+                <Route path="/characters/:game/:page" element={<List games={games} mobas={mobas} pageName="characters" />} />
                 <Route path="/leagues/:game/:page" element={<List games={games} pageName="leagues" />} />
                 <Route exact path="/login" element={<Login getUser={getUser} />} />
+                <Route path="/matches/:game" element={<Matches games={games} getUser={getUser} user={user} />} />
                 <Route path="/players/:game/:page" element={<List games={games} pageName="players" />} />
                 <Route exact path="/registration" element={<Registration />} />
                 <Route path="/teams/:game/:page" element={<List games={games} pageName="teams" />} />
+
                 {user !== null && <Route path="*" element={<NotFound />} />}
             </Routes>
         </BrowserRouter>

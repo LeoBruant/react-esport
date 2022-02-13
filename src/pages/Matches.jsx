@@ -179,8 +179,8 @@ export default function Matches({ games, getUser, user }) {
                 <Header game={games[game]} games={games} title="Matchs" />
                 <Legend
                     legend={[
-                        { color: '#0d0', label: 'Match gagné' },
-                        { color: '#d00', label: 'Match perdu' },
+                        { color: '#0d0', label: 'Pari gagné' },
+                        { color: '#d00', label: 'Pari perdu' },
                         { color: '#0b5ed7', label: "Match d'une ligue favorie" }
                     ]}
                 />
