@@ -11,7 +11,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 
 export default function Matches({ games, getUser, user }) {
     const matchTypes = {
-        passed: { title: 'passés' },
+        past: { title: 'passés' },
         running: { title: 'en cours' },
         upcoming: { title: 'à venir' }
     }
@@ -21,14 +21,14 @@ export default function Matches({ games, getUser, user }) {
 
     const [bets, setBets] = useState([])
     const [counter, setCounter] = useState(0)
-    const [favouriteMatches, setFavouriteMatches] = useState([])
+    const [favouriteMatches, setFavouriteMatches] = useState({ past: [], running: [], upcoming: [] })
     const [isLoaded, setIsLoaded] = useState(false)
     const [matchBet, setMatchBet] = useState({
         id: null,
         name: null,
         opponents: {}
     })
-    const [matches, setMatches] = useState({ passed: [], running: [], upcoming: [] })
+    const [matches, setMatches] = useState({ past: [], running: [], upcoming: [] })
 
     const getBets = () => {
         axios.get('http://localhost:3004/bets').then(({ data }) => {
@@ -55,7 +55,7 @@ export default function Matches({ games, getUser, user }) {
                         setMatches((oldMatches) => {
                             return {
                                 ...oldMatches,
-                                passed: data
+                                past: data
                             }
                         })
                     }),
@@ -112,21 +112,59 @@ export default function Matches({ games, getUser, user }) {
                             leagues.push(leagueId)
                         })
 
-                        pandascore
-                            .get(game + '/matches/upcoming' + searchParam, {
-                                params: {
-                                    'filter[league_id]': leagues.join(),
-                                    perPage: 100
-                                }
-                            })
-                            .then(({ data }) => {
-                                setFavouriteMatches(data)
+                        axios
+                            .all([
+                                pandascore
+                                    .get(game + '/matches/past' + searchParam, {
+                                        params: {
+                                            'filter[league_id]': leagues.join(),
+                                            perPage: 100
+                                        }
+                                    })
+                                    .then(({ data }) => {
+                                        setFavouriteMatches((oldFavouriteMatches) => {
+                                            return {
+                                                ...oldFavouriteMatches,
+                                                past: data
+                                            }
+                                        })
+                                    }),
+                                pandascore
+                                    .get(game + '/matches/running' + searchParam, {
+                                        params: {
+                                            'filter[league_id]': leagues.join(),
+                                            perPage: 100
+                                        }
+                                    })
+                                    .then(({ data }) => {
+                                        setFavouriteMatches((oldFavouriteMatches) => {
+                                            return {
+                                                ...oldFavouriteMatches,
+                                                running: data
+                                            }
+                                        })
+                                    }),
+                                pandascore
+                                    .get(game + '/matches/upcoming' + searchParam, {
+                                        params: {
+                                            'filter[league_id]': leagues.join(),
+                                            perPage: 100
+                                        }
+                                    })
+                                    .then(({ data }) => {
+                                        setFavouriteMatches((oldFavouriteMatches) => {
+                                            return {
+                                                ...oldFavouriteMatches,
+                                                upcoming: data
+                                            }
+                                        })
+                                    })
+                            ])
+                            .then(() => {
+                                setIsLoaded(true)
                             })
                     }
                 })
-            })
-            .then(() => {
-                setIsLoaded(true)
             })
     }, [game, params])
 
@@ -191,35 +229,33 @@ export default function Matches({ games, getUser, user }) {
                             <section className="matches-container col-12 col-sm-10 col-md-6 col-xl-4" key={matchType[0]}>
                                 <h2 className="title">{matchTypes[matchType[0]].title}</h2>
                                 <div className="matches">
-                                    {matchType[0] === 'upcoming' &&
-                                        favouriteMatches.map((match) => (
-                                            <Match
-                                                bet={
-                                                    bets.filter(
-                                                        ({ matchId, userId }) =>
-                                                            matchId === match.id && userId === parseInt(localStorage.id)
-                                                    )[0] !== null
-                                                        ? bets.filter(
-                                                              ({ matchId, userId }) =>
-                                                                  matchId === match.id && userId === parseInt(localStorage.id)
-                                                          )[0]
-                                                        : null
-                                                }
-                                                bets={
-                                                    bets.filter(({ matchId }) => matchId === match.id).length !== 0
-                                                        ? bets.filter(({ matchId }) => matchId === match.id)
-                                                        : []
-                                                }
-                                                favourite={true}
-                                                getBets={getBets}
-                                                getUser={getUser}
-                                                key={match.id}
-                                                match={match}
-                                                matchType={matchType}
-                                                showBet={showBet}
-                                                user={user}
-                                            />
-                                        ))}
+                                    {Object.entries(favouriteMatches[matchType[0]]).map((match) => (
+                                        <Match
+                                            bet={
+                                                bets.filter(
+                                                    ({ matchId, userId }) => matchId === match[1].id && userId === parseInt(localStorage.id)
+                                                )[0] !== null
+                                                    ? bets.filter(
+                                                          ({ matchId, userId }) =>
+                                                              matchId === match[1].id && userId === parseInt(localStorage.id)
+                                                      )[0]
+                                                    : null
+                                            }
+                                            bets={
+                                                bets.filter(({ matchId }) => matchId === match[1].id).length !== 0
+                                                    ? bets.filter(({ matchId }) => matchId === match[1].id)
+                                                    : []
+                                            }
+                                            favourite={true}
+                                            getBets={getBets}
+                                            getUser={getUser}
+                                            key={match[1].id}
+                                            match={match[1]}
+                                            matchType={matchType}
+                                            showBet={showBet}
+                                            user={user}
+                                        />
+                                    ))}
                                     {matchType[1].map((match) => (
                                         <Match
                                             bet={

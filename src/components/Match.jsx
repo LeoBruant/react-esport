@@ -144,12 +144,12 @@ export default function Match({
                             vs
                         </p>
                         {bet !== undefined && (
-                            <Button className="d-block mx-auto mt-3" onClick={cancelBet} variant="danger">
+                            <Button className="d-block mx-auto mt-2" onClick={cancelBet} variant="danger">
                                 Annuler
                             </Button>
                         )}
                         {bet === undefined && opponents[0] !== undefined && opponents[1] !== undefined && (
-                            <Button className="d-block mx-auto mt-3" onClick={() => showBet(id, name, opponents)} variant="success">
+                            <Button className="d-block mx-auto mt-2" onClick={() => showBet(id, name, opponents)} variant="success">
                                 Parier
                             </Button>
                         )}
@@ -162,7 +162,7 @@ export default function Match({
                         </p>
 
                         {matchType[0] === 'running' && (
-                            <Button className="d-block mx-auto mt-3" href={official_stream_url} target="_blank" variant="primary">
+                            <Button className="d-block mx-auto mt-2" href={official_stream_url} target="_blank" variant="primary">
                                 Visionner
                             </Button>
                         )}
