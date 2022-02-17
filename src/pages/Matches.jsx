@@ -112,59 +112,58 @@ export default function Matches({ games, getUser, user }) {
                             leagues.push(leagueId)
                         })
 
-                        axios
-                            .all([
-                                pandascore
-                                    .get(game + '/matches/past' + searchParam, {
-                                        params: {
-                                            'filter[league_id]': leagues.join(),
-                                            perPage: 100
+                        axios.all([
+                            pandascore
+                                .get(game + '/matches/past' + searchParam, {
+                                    params: {
+                                        'filter[league_id]': leagues.join(),
+                                        perPage: 100
+                                    }
+                                })
+                                .then(({ data }) => {
+                                    setFavouriteMatches((oldFavouriteMatches) => {
+                                        return {
+                                            ...oldFavouriteMatches,
+                                            past: data
                                         }
                                     })
-                                    .then(({ data }) => {
-                                        setFavouriteMatches((oldFavouriteMatches) => {
-                                            return {
-                                                ...oldFavouriteMatches,
-                                                past: data
-                                            }
-                                        })
-                                    }),
-                                pandascore
-                                    .get(game + '/matches/running' + searchParam, {
-                                        params: {
-                                            'filter[league_id]': leagues.join(),
-                                            perPage: 100
+                                }),
+                            pandascore
+                                .get(game + '/matches/running' + searchParam, {
+                                    params: {
+                                        'filter[league_id]': leagues.join(),
+                                        perPage: 100
+                                    }
+                                })
+                                .then(({ data }) => {
+                                    setFavouriteMatches((oldFavouriteMatches) => {
+                                        return {
+                                            ...oldFavouriteMatches,
+                                            running: data
                                         }
                                     })
-                                    .then(({ data }) => {
-                                        setFavouriteMatches((oldFavouriteMatches) => {
-                                            return {
-                                                ...oldFavouriteMatches,
-                                                running: data
-                                            }
-                                        })
-                                    }),
-                                pandascore
-                                    .get(game + '/matches/upcoming' + searchParam, {
-                                        params: {
-                                            'filter[league_id]': leagues.join(),
-                                            perPage: 100
+                                }),
+                            pandascore
+                                .get(game + '/matches/upcoming' + searchParam, {
+                                    params: {
+                                        'filter[league_id]': leagues.join(),
+                                        perPage: 100
+                                    }
+                                })
+                                .then(({ data }) => {
+                                    setFavouriteMatches((oldFavouriteMatches) => {
+                                        return {
+                                            ...oldFavouriteMatches,
+                                            upcoming: data
                                         }
                                     })
-                                    .then(({ data }) => {
-                                        setFavouriteMatches((oldFavouriteMatches) => {
-                                            return {
-                                                ...oldFavouriteMatches,
-                                                upcoming: data
-                                            }
-                                        })
-                                    })
-                            ])
-                            .then(() => {
-                                setIsLoaded(true)
-                            })
+                                })
+                        ])
                     }
                 })
+            })
+            .then(() => {
+                setIsLoaded(true)
             })
     }, [game, params])
 
