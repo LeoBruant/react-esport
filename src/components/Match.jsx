@@ -125,7 +125,7 @@ export default function Match({
             </div>
             <div className="d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center flex-column">
-                    <h4 className="text-center">{opponents[0] !== undefined ? opponents[0].opponent.acronym : 'Unknown'}</h4>
+                    <h4 className="text-center">{opponents[0] !== undefined ? opponents[0].opponent.acronym : 'Inconnu'}</h4>
                     <img
                         alt={opponents[0] !== undefined ? opponents[0].opponent.name + ' image' : 'no image'}
                         className="mt-3"
@@ -169,7 +169,7 @@ export default function Match({
                     </div>
                 )}
                 <div>
-                    <h4 className="text-center">{opponents[1] !== undefined ? opponents[1].opponent.acronym : 'Unknown'}</h4>
+                    <h4 className="text-center">{opponents[1] !== undefined ? opponents[1].opponent.acronym : 'Inconnu'}</h4>
                     <img
                         alt={opponents[1] !== undefined ? opponents[1].opponent.name + ' image' : 'no image'}
                         className="mt-3"

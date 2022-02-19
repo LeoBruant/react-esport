@@ -1,37 +1,55 @@
 import { Pagination } from 'react-bootstrap'
+import React from 'react'
 
-export default function PaginationCustom({ changePage, elementsNumber, page }) {
-    return (
-        <Pagination className="justify-content-center">
-            <Pagination.First disabled={parseInt(page) === 1} onClick={() => (parseInt(page) !== 1 ? changePage(1) : '')} />
-            <Pagination.Prev disabled={parseInt(page) === 1} onClick={() => (page > 1 ? changePage(parseInt(page) - 1) : '')} />
+export default class PaginationCustom extends React.Component {
+    render() {
+        return (
+            <Pagination className="justify-content-center">
+                <Pagination.First
+                    disabled={parseInt(this.props.page) === 1}
+                    onClick={() => (parseInt(this.props.page) !== 1 ? this.props.changePage(1) : '')}
+                />
+                <Pagination.Prev
+                    disabled={parseInt(this.props.page) === 1}
+                    onClick={() => (this.props.page > 1 ? this.props.changePage(parseInt(this.props.page) - 1) : '')}
+                />
 
-            {page > 1 && <Pagination.Ellipsis />}
+                {this.props.page > 1 && <Pagination.Ellipsis />}
 
-            {page > 1 && (
-                <Pagination.Item active={false} onClick={() => changePage(parseInt(page) - 1)}>
-                    {page - 1}
-                </Pagination.Item>
-            )}
+                {this.props.page > 1 && (
+                    <Pagination.Item active={false} onClick={() => this.props.changePage(parseInt(this.props.page) - 1)}>
+                        {this.props.page - 1}
+                    </Pagination.Item>
+                )}
 
-            <Pagination.Item active={true}>{page}</Pagination.Item>
+                <Pagination.Item active={true}>{this.props.page}</Pagination.Item>
 
-            {page < elementsNumber && (
-                <Pagination.Item active={false} onClick={() => (page < elementsNumber ? changePage(parseInt(page) + 1) : '')}>
-                    {parseInt(page) + 1}
-                </Pagination.Item>
-            )}
+                {this.props.page < this.props.elementsNumber && (
+                    <Pagination.Item
+                        active={false}
+                        onClick={() =>
+                            this.props.page < this.props.elementsNumber ? this.props.changePage(parseInt(this.props.page) + 1) : ''
+                        }
+                    >
+                        {parseInt(this.props.page) + 1}
+                    </Pagination.Item>
+                )}
 
-            {parseInt(page) < elementsNumber && <Pagination.Ellipsis />}
+                {parseInt(this.props.page) < this.props.elementsNumber && <Pagination.Ellipsis />}
 
-            <Pagination.Next
-                disabled={parseInt(page) === elementsNumber}
-                onClick={() => (parseInt(page) < elementsNumber ? changePage(parseInt(page) + 1) : '')}
-            />
-            <Pagination.Last
-                disabled={parseInt(page) >= elementsNumber}
-                onClick={() => (parseInt(page) !== elementsNumber ? changePage(elementsNumber) : '')}
-            />
-        </Pagination>
-    )
+                <Pagination.Next
+                    disabled={parseInt(this.props.page) === this.props.elementsNumber}
+                    onClick={() =>
+                        parseInt(this.props.page) < this.props.elementsNumber ? this.props.changePage(parseInt(this.props.page) + 1) : ''
+                    }
+                />
+                <Pagination.Last
+                    disabled={parseInt(this.props.page) >= this.props.elementsNumber}
+                    onClick={() =>
+                        parseInt(this.props.page) !== this.props.elementsNumber ? this.props.changePage(this.props.elementsNumber) : ''
+                    }
+                />
+            </Pagination>
+        )
+    }
 }

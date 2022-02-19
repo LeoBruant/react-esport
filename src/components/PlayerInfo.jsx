@@ -1,35 +1,46 @@
 import { Modal } from 'react-bootstrap'
 import noImage from '../assets/images/no-image.jpg'
+import React from 'react'
 
-export default function TeamInfo({ hidePlayer, player: { first_name, hometown, id, image_url, last_name, name, nationality, role } }) {
-    return (
-        <Modal show={id !== null}>
-            <Modal.Header closeButton onHide={hidePlayer}>
-                <Modal.Title>
-                    {name} ({first_name} {last_name})
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div>
-                    <div className="d-flex align-items-center p-2">
-                        <div className="col-6">
-                            <p>
-                                Nationnalité :{' '}
-                                {nationality !== null ? (
-                                    <span
-                                        className={'fi fi-' + nationality.toLowerCase()}
-                                        title={hometown !== null ? hometown : nationality}
-                                    ></span>
-                                ) : (
-                                    'Inconnue'
-                                )}
-                            </p>
-                            <p className="m-0">Role : {role !== null ? role : 'Inconnu'}</p>
+export default class PlayerInfo extends React.Component {
+    render() {
+        return (
+            <Modal show={this.props.player.id !== null}>
+                <Modal.Header closeButton onHide={this.props.hidePlayer}>
+                    <Modal.Title>
+                        {this.props.player.name} ({this.props.player.first_name} {this.props.player.last_name})
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div>
+                        <div className="d-flex align-items-center p-2">
+                            <div className="col-6">
+                                <p>
+                                    Nationnalité :{' '}
+                                    {this.props.player.nationality !== null ? (
+                                        <span
+                                            className={'fi fi-' + this.props.player.nationality.toLowerCase()}
+                                            title={
+                                                this.props.player.hometown !== null
+                                                    ? this.props.player.hometown
+                                                    : this.props.player.nationality
+                                            }
+                                        ></span>
+                                    ) : (
+                                        'Inconnue'
+                                    )}
+                                </p>
+                                <p className="m-0">Role : {this.props.player.role !== null ? this.props.player.role : 'Inconnu'}</p>
+                            </div>
+                            <img
+                                alt={this.props.player.name + ' image'}
+                                className="col-6"
+                                src={this.props.image_url !== null ? this.props.player.image_url : noImage}
+                            />
                         </div>
-                        <img alt={name + ' image'} className="col-6" src={image_url !== null ? image_url : noImage} />
                     </div>
-                </div>
-            </Modal.Body>
-        </Modal>
-    )
+                </Modal.Body>
+            </Modal>
+        )
+    }
 }

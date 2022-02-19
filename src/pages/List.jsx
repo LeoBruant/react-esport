@@ -30,7 +30,7 @@ export default function List({ games, mobas = null, pageName }) {
 
     const [favourites, setFavourites] = useState([])
     const [isLoaded, setIsLoaded] = useState(false)
-    const [matches, setMatches] = useState({})
+    const [matches, setMatches] = useState([])
     const [pagesNumber, setPagesNumber] = useState(0)
     const [element, setElement] = useState(null)
     const [elements, setElements] = useState([])
@@ -102,24 +102,7 @@ export default function List({ games, mobas = null, pageName }) {
 
                     if (pageName === 'teams') {
                         pandascore.get(game + '/matches/running', { params: { per_page: 100 } }).then(({ data }) => {
-                            let newMatches = data
-
-                            elements.forEach(({ id }) => {
-                                let match = data.filter(
-                                    ({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id
-                                )
-
-                                if (match.length !== 0) {
-                                    newMatches = {
-                                        ...newMatches,
-                                        [id]: data.filter(
-                                            ({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id
-                                        )
-                                    }
-                                }
-                            })
-
-                            setMatches(newMatches)
+                            setMatches(data)
                         })
                         setIsLoaded(true)
                     } else {
@@ -179,7 +162,9 @@ export default function List({ games, mobas = null, pageName }) {
                                             acronym={acronym}
                                             image_url={image_url}
                                             location={location}
-                                            match={matches[id] !== undefined ? matches[id] : null}
+                                            match={matches.filter(
+                                                ({ opponents }) => opponents[0].opponent.id === id || opponents[1].opponent.id === id
+                                            )}
                                             name={name}
                                             players={players}
                                             showTeam={showElement}

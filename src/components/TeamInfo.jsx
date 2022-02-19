@@ -10,7 +10,7 @@ export default function TeamInfo({ hideTeam, team: { id, location, name, players
                     {location !== null && location !== '' ? (
                         <span className={'fi fi-' + location.toLowerCase()} title={location}></span>
                     ) : (
-                        'Inconnu'
+                        ''
                     )}
                 </Modal.Title>
             </Modal.Header>
