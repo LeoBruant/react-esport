@@ -2,7 +2,7 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link, useNavigate } from 'react-router-dom'
 
-export default function NavBar({ coins, mobas, theme }) {
+export default function NavBar({ mobas, theme, user: { coins, username } }) {
     const game = window.location.href.split('/')[4]
 
     const navigate = useNavigate()
@@ -43,10 +43,10 @@ export default function NavBar({ coins, mobas, theme }) {
                         </Navbar.Collapse>
                         <Navbar.Toggle aria-controls="collapse" />
                         <Nav className="flex-row">
-                            <Navbar.Text className="mx-1">{coins} Jetons</Navbar.Text>
+                            <Navbar.Text className="mx-1">
+                                {username} ({coins} Jetons)
+                            </Navbar.Text>
                             <NavDropdown className="mx-1" title={<FontAwesomeIcon icon={['fas', 'cog']} />}>
-                                <NavDropdown.Item>Profil</NavDropdown.Item>
-                                <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={disconnect}>Déconnexion</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>

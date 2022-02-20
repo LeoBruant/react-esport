@@ -16,7 +16,7 @@ export default function App() {
         codmw: 'COD MW',
         dota2: 'Dota 2',
         fifa: 'Fifa',
-        lol: 'Lol',
+        lol: 'League of legends',
         ow: 'Overwatch',
         // pubg: 'PUBG',
         r6siege: 'Rainbow 6 siege',
@@ -45,7 +45,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <Redirect />
-            <NavBar coins={user !== null ? user.coins : null} mobas={mobas} theme="dark" />
+            <NavBar mobas={mobas} theme="dark" user={user} />
             <Routes>
                 <Route exact path="/" element={<Redirect basePath={true} game={Object.keys(games)[0]} />} />
 

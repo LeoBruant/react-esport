@@ -15,11 +15,12 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function List({ games, mobas = null, pageName }) {
     const pageNames = {
+        champions: 'Champions',
+        characters: 'Personnages',
+        heroes: 'Héros',
         leagues: 'Ligues',
         players: 'Joueurs',
-        teams: 'Équipes',
-        champions: 'Champions',
-        heroes: 'Héros'
+        teams: 'Équipes'
     }
     const perPage = 25
 
@@ -110,7 +111,7 @@ export default function List({ games, mobas = null, pageName }) {
                     }
                 })
         }
-    }, [game, navigate, page, pageName, pagesNumber, params])
+    }, [game, mobas, navigate, page, pageName, pagesNumber, params])
 
     return (
         <>
