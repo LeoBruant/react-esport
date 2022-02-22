@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function NavBar({ mobas, theme, user }) {
-    const game = window.location.href.split('/')[4]
+    const game = window.location.href.split('/')[4].split('?')[0]
 
     const navigate = useNavigate()
 
