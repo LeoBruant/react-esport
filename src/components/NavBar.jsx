@@ -45,7 +45,7 @@ export default function NavBar({ games, mobas, theme, user }) {
                         <Navbar.Toggle aria-controls="collapse" />
                         <Nav className="flex-row">
                             <Navbar.Text className="mx-1">
-                                {user.username} ({user.coins} Jetons)
+                                {user.username} ({user.coins + ' ' + (user.coins === 1 ? 'Jeton' : 'Jetons')})
                             </Navbar.Text>
                             <NavDropdown className="mx-1" title={<FontAwesomeIcon icon={['fas', 'cog']} />}>
                                 <NavDropdown.Item onClick={disconnect}>Déconnexion</NavDropdown.Item>

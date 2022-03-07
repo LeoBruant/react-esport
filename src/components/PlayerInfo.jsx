@@ -17,7 +17,7 @@ export default class PlayerInfo extends React.Component {
                             <div className="col-6">
                                 <p>
                                     Nationnalité :{' '}
-                                    {this.props.player.nationality !== null ? (
+                                    {this.props.player.nationality !== null && this.props.player.nationality !== undefined ? (
                                         <span
                                             className={'fi fi-' + this.props.player.nationality.toLowerCase()}
                                             title={
@@ -35,7 +35,11 @@ export default class PlayerInfo extends React.Component {
                             <img
                                 alt={this.props.player.name + ' image'}
                                 className="col-6"
-                                src={this.props.image_url !== null ? this.props.player.image_url : noImage}
+                                src={
+                                    this.props.image_url !== null && this.props.image_url !== undefined
+                                        ? this.props.player.image_url
+                                        : noImage
+                                }
                             />
                         </div>
                     </div>

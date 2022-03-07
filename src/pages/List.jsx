@@ -126,14 +126,7 @@ export default function List({ games, mobas = null, pageName }) {
                             <div className="elements">
                                 {pageName === 'characters' &&
                                     elements.map(({ id, image_url, localized_name, name }) => (
-                                        <Character
-                                            key={id}
-                                            id={id}
-                                            image_url={image_url}
-                                            localized_name={localized_name}
-                                            name={name}
-                                            showCharacter={showElement}
-                                        />
+                                        <Character key={id} id={id} image_url={image_url} localized_name={localized_name} name={name} />
                                     ))}
                                 {pageName === 'leagues' &&
                                     elements.map(({ id, image_url, name, url }) => (

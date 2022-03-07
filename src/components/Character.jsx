@@ -6,7 +6,6 @@ export default class Character extends React.Component {
         return (
             <div
                 className="element p-4 d-flex flex-column my-2"
-                onClick={() => this.props.showCharacter(this.props.id)}
                 style={{ height: '250px', width: '250px', border: '2px solid transparent', borderRadius: '0.25rem' }}
             >
                 <p className="text-center" style={{ fontSize: '1.25rem' }}>
