@@ -45,7 +45,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <Redirect />
-            <NavBar mobas={mobas} theme="dark" user={user} />
+            <NavBar games={games} mobas={mobas} theme="dark" user={user} />
             <Routes>
                 <Route exact path="/" element={<Redirect basePath={true} game={Object.keys(games)[0]} />} />
 

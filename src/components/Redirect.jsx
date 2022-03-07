@@ -20,7 +20,11 @@ export default function Redirect({ basePath, game }) {
             })
 
             if (basePath) {
-                navigate('/matches/' + game)
+                if (localStorage.token === undefined || localStorage.id === undefined) {
+                    navigate('/login')
+                } else {
+                    navigate('/matches/' + game)
+                }
             }
         }
     }, [basePath, game, navigate])
