@@ -18,4 +18,8 @@ export const Style = styled.div`
             }
         }
     }
+
+    .no-elements {
+        text-align: center;
+    }
 `

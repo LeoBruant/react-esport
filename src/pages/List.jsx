@@ -119,7 +119,7 @@ export default function List({ games, mobas = null, pageName }) {
             <Style>
                 <Header game={games[game]} games={games} title={pageNames[pageName]} />
                 {!isLoaded && <Spinner animation="border" className="spinner" />}
-                {isLoaded && (
+                {isLoaded && elements.length !== 0 && (
                     <>
                         <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                         <main className="main container">
@@ -169,6 +169,7 @@ export default function List({ games, mobas = null, pageName }) {
                         <PaginationCustom changePage={changePage} elementsNumber={pagesNumber} page={page} />
                     </>
                 )}
+                {isLoaded && elements.length === 0 && <h2 className="no-elements">Auncun élément n'a été trouvé</h2>}
             </Style>
             {element !== null && (
                 <>
